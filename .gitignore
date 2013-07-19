@@ -2,11 +2,12 @@
 *.slo
 *.lo
 *.o
-
+CMakeLists.txt.user
+*.autosave
 # Compiled Dynamic libraries
 *.so
 *.dylib
-
+/build
 # Compiled Static libraries
 *.lai
 *.la

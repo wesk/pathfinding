@@ -5,6 +5,7 @@
 #include <vector>
 #include <math.h>
 
+
 #include "graph.h"
 #include "node.h"
 
@@ -17,27 +18,28 @@
 
 int main(){
 
-   std::vector<int> a;
-   a.push_back(1);
-   a.push_back(2);
-   a.push_back(3);
-   a.push_back(4);
-   std::vector<int>::iterator aIt;
+    std::vector<int> a;
+    a.push_back(1);
+    a.push_back(2);
+    a.push_back(3);
+    a.push_back(4);
+    std::vector<int>::iterator aIt;
 
-   std::cout<<a.size()<<std::endl;
+    std::cout<<a.size()<<std::endl;
 
-   for(a.begin() = aIt; aIt != a.end(); aIt++){
+    for(aIt = a.begin(); aIt != a.end(); aIt++){ //careful reverse syntax
        std::cout<<*aIt<<std::endl;
-   }
+    }
 
-   std::vector<std::vector<node>> p; // 2d vector of vectors
+    //std::vector<std::vector<node>> p(2); // 2d vector of vectors
 
+    std::vector <std::vector<int>> myvector(2);
+    int qq[] = {0, 1, 2, 3, 4};
+    size_t elements = sizeof(qq) / sizeof(int);
 
-//    graph myG;
-//    myG.fill(0,0,50,50);
-//    myG.clear(1,1,48,48);
-//    myG.setStart(40,1);
-//    myG.setGoal(40,48);
+    myvector[0].reserve(elements);
+    std::copy ( qq, qq + elements, std::back_inserter ( myvector[0] ) );
+
 
 }
 // std::cout<<(sizeof(a) / sizeof(node))<<" and "<<2500 <<std::endl;
