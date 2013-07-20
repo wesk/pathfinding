@@ -9,6 +9,7 @@ public:
     int distance; // distance from start
     bool visited; // true when all possible routes tested
     struct node* pointerToPrevious;
+    //void yo();
 };
 
 #endif // NODE_H

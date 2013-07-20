@@ -1,6 +1,8 @@
 #include "node.h"
 #include <stdlib.h>
-
+#include <stdio.h>
+#include <iostream>
+#include <eigen3/Eigen/Eigen>
 
 node::node()
 {
@@ -10,3 +12,7 @@ node::node()
     pointerToPrevious = NULL;
 
 }
+
+//void node::yo(){
+//    std::cout<<"yo"<<std::endl;
+//}

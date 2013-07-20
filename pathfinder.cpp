@@ -15,10 +15,10 @@
 //    int col;
 //};
 
-pathfinder::pathfinder(graph g)
-{
-    myG = g;
-}
+//pathfinder::pathfinder(graph g)
+//{
+//    myG = g;
+//}
 
 bool pathfinder::findPath(){ // The Core. Dijkstra
 

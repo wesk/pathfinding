@@ -1,6 +1,9 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 #include "node.h"
+#include <eigen3/Eigen/Eigen>
+
+// .block( , , , ) is not foolproof. It throws errors if it reaches out of range. If statements necessary
 
 
 struct loc{
@@ -11,27 +14,32 @@ struct loc{
 
 class graph{
 protected:
-    node g[50][50]; //todo: use dynamic std::vector instead // DOIN NOW!
+    Eigen::Matrix<node,Eigen::Dynamic,Eigen::Dynamic> g;
     loc start;
     loc goal;
 
 public:
-    graph();
+    graph(int numRows, int numCols);
+
     void fill(int rowstart, int colstart, int rowlen, int collen);
     void clear(int rowstart, int colstart, int rowlen, int collen);
-    void print(); // convert from int to pretty ascii pictures
+    void setStart(loc l);
+    void setGoal(loc l);
 
-    void setStart(int row, int col);
-    void setGoal(int row, int col);
-    node getAllAdjacentTo(loc l);
+    Eigen::Matrix<node,Eigen::Dynamic,Eigen::Dynamic> getAllAdjacentTo(loc l);
 
     node getNode(int row, int col);
     node getStart();
     node getGoal();
 
+    void testConfig();
+
+    void print(); // TODO convert from int to pretty ascii pictures
+
+
 private:
 
-    bool outOfBound(int amIOutOfRange); // returns to ensure input is legal.
+    void outOfBound(loc amIOutOfRange); // returns to ensure input is legal.
 
 };
 

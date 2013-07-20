@@ -6,79 +6,104 @@
 #include <iostream>
 #include <math.h>
 #include <vector>
+#include <eigen3/Eigen/Eigen>
 
-graph::graph()
-{
-
+graph::graph(int numRows, int numCols){
+    g.resize(numRows,numCols);
 }
 
-node graph::getNode(int row, int col){
-    if(outOfBound(row) || outOfBound(col) ){
-        std::cout<<"ALERT! OUT OF BOUND!"<<std::endl;
-    }
-    return g[row][col];
-}
 
-void graph::print(){
-    int size = sqrt(sizeof(g) / sizeof(node));
-    for(int i = 0; i < size; i++){
-        for(int j = 0; j < size; j++){
-            std::cout<<getNode(i,j).value;
-        }
-        std::cout<<"\n";
-    }
-}
+void graph::fill(int rowstart,int colstart,int rowlen,int collen){
+    loc myLoc;
+    myLoc.row = rowstart;
+    myLoc.col = colstart;
 
-bool graph::outOfBound(int amIOutOfRange){
-    bool state = false;
-    int size = sqrt(sizeof(g) / sizeof(node));
-    if( (amIOutOfRange < 0) || (amIOutOfRange >= size)){
-        state = true;
-    }
-    return state;
-}
+    loc myLoc2;
+    myLoc2.row = rowstart+rowlen-1;
+    myLoc2.col = colstart+collen-1;
 
-void graph::fill(int rowstart, int colstart, int rowlen, int collen){
-    if((outOfBound(rowstart) || outOfBound(colstart) || outOfBound(rowstart+rowlen-1) || outOfBound(colstart+collen-1))){
-        std::cout<<"ALERT!!!!"<<std::endl;
-    }
-    for(int i = colstart; i < colstart+collen; i++){
-        for(int j = rowstart; j < rowstart+rowlen; j++){
-            g[j][i].value = 1;
+    graph::outOfBound(myLoc);
+    graph::outOfBound(myLoc2);
+
+
+    Eigen::Matrix<node,Eigen::Dynamic,Eigen::Dynamic> chunk = g.block(rowstart,colstart,rowlen,collen);
+    for(int i = 0; i < chunk.rows(); i++){
+        for(int j = 0; j < chunk.cols(); j++){
+            chunk(i,j).value = 1;
         }
     }
+    g.block(rowstart,colstart,rowlen,collen) = chunk; // not super elegant, but should work just fine.
+
 }
 
 void graph::clear(int rowstart, int colstart, int rowlen, int collen){
-    if((outOfBound(rowstart) || outOfBound(colstart) || outOfBound(rowstart+rowlen) || outOfBound(colstart+collen))){
-        std::cout<<"ALERT!!!!"<<std::endl;
-    }
-    for(int i = colstart; i < colstart+collen; i++){
-        for(int j = rowstart; j < rowstart+rowlen; j++){
-            g[j][i].value = 0;
+    loc myLoc;
+    myLoc.row = rowstart;
+    myLoc.col = colstart;
+
+    loc myLoc2;
+    myLoc2.row = rowstart+rowlen-1;
+    myLoc2.col = colstart+collen-1;
+
+    graph::outOfBound(myLoc);
+    graph::outOfBound(myLoc2);
+
+
+    Eigen::Matrix<node,Eigen::Dynamic,Eigen::Dynamic> chunk = g.block(rowstart,colstart,rowlen,collen);
+    for(int i = 0; i < chunk.rows(); i++){
+        for(int j = 0; j < chunk.cols(); j++){
+            chunk(i,j).value = 0;
         }
     }
+    g.block(rowstart,colstart,rowlen,collen) = chunk; // not super elegant, but should work just fine.
+
 }
 
-void graph::setStart(int row, int col){
-    g[row][col].value = 3;
-    g[row][col].distance = 0;
-    start.row = row;
-    start.col = col;
+void graph::outOfBound(loc amIOutOfRange){
+    if(amIOutOfRange.row < 0 || amIOutOfRange.col < 0 || amIOutOfRange.row >= g.rows() || amIOutOfRange.col >= g.cols()){
+        throw "Input Out Of Range Error!";
+    }
 }
 
-void graph::setGoal(int row, int col){
-    g[row][col].value = 4;
-    goal.row = row;
-    goal.col = col;
+void graph::print(){
+    for(int i = 0; i < g.rows(); i++){
+        for(int j = 0; j < g.cols(); j++){
+            int present = g(i,j).value;
+            if(present == 0){
+                std::cout<<"  ";
+            }
+            else{
+                std::cout<<present<<" ";
+            }
+        }
+        std::cout<<"\n";
+    }
+
 }
 
-node graph::getStart(){
-    return g[start.row][start.col];
+void graph::setStart(loc l){
+    start = l;
+    g(l.row,l.col).value = 3;
+
 }
 
-node graph::getGoal(){
-    return g[goal.row][goal.col];
+void graph::setGoal(loc l){
+    goal = l;
+    g(l.row,l.col).value = 4;
 }
 
+void graph::testConfig(){
+    std::cout<<"You have chosen the convenient testing constructor\n";
+    g.resize(10,10);
+    this->fill(0,0,10,10);
+    this->clear(1,1,8,8);
+    this->fill(0,2,5,1);
+    this->fill(0,3,5,1);
+    this->fill(3,5,7,1);
+    this->fill(3,6,7,1);
+    loc s {6,3};
+    loc gg {4,7};
+    this->setStart(s);
+    this->setGoal(gg);
+}
 
