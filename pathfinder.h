@@ -4,8 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
-
-#include "graph.h"
+#include "grid.h"
 #include "node.h"
 
 #ifndef PATHFINDER_H
@@ -14,13 +13,19 @@
 class pathfinder
 {
 private:
-    graph myG; // this is the one we will solve
+    grid gr;
+    int a = 120;
 public:
-    pathfinder(graph g);
+    pathfinder(grid &gr);
     bool findPath();
-    graph getSolved();
-private:
+    grid getSolved();
+    void modifyTest();
 
+
+private:
+//    void calcDistOfAllAdj(loc l); //then, sets node as visited.
+//    Eigen::Matrix<loc,Eigen::Dynamic,1> getAllActive_Unfinalized(); // returns vector of locs of nodes. each has distance != 1 && visited = false
+    void updateGraph();
 };
 
 #endif // PATHFINDER_H

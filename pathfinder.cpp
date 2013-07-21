@@ -4,26 +4,48 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
-
-#include "graph.h"
+#include "grid.h"
 #include "node.h"
-
 #include "pathfinder.h"
 
-//struct loc{
-//    int row;
-//    int col;
-//};
+pathfinder::pathfinder(grid &g) : gr(g) //Initialization Lists! Did not know this was needed.
+{
 
-//pathfinder::pathfinder(graph g)
-//{
-//    myG = g;
-//}
+}
 
 bool pathfinder::findPath(){ // The Core. Dijkstra
 
-    /*
 
-    */
-    return true;
+    gr.calcDistOfAllValidAdj(gr.getStart());
+
+    std::vector<loc> theMasterList;
+    //theMasterList= gr.getAllActiveUnfinalized();
+
+    std::cout<<"inside findpath method\n";
+    do{
+        theMasterList= gr.getAllActiveUnfinalized();
+        std::cout<<"main loop running\n";
+        for(unsigned int index = 0; index < theMasterList.capacity(); index ++){
+            gr.calcDistOfAllValidAdj(theMasterList[index]);
+        }
+    }
+    while(theMasterList.capacity() != 0);
+
+    if(gr.getNodeVisited(gr.getGoal()) == true){
+        updateGraph();
+        return true;
+    }
+    return false;
+}
+
+void pathfinder::updateGraph(){ // This steps backwards to the start, folowing the winning path.
+    node* current = gr.getNodePointerToPrev(gr.getGoal());
+    while(current != NULL){
+        current->value = 2;
+        current = current->pointerToPrevious;
+    }
+}
+
+grid pathfinder::getSolved(){
+    return gr;
 }

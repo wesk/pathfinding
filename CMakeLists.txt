@@ -8,4 +8,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wextra -Wall")
 # include_directories(${Pangolin_INCLUDE_DIRS})
 # link_libraries(${Pangolin_LIBRARIES})
 
-add_executable(compiledBinary main.cpp graph.cpp graph.h node.cpp node.h pathfinder.cpp pathfinder.h)
+add_executable(compiledBinary main.cpp grid.cpp grid.h node.cpp node.h pathfinder.cpp pathfinder.h)
