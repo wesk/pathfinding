@@ -83,8 +83,7 @@ void grid::print(){
 }
 
 void grid::printEverything(){
-    std::cout<<"value:\n";
-    this->print();
+
     std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
@@ -103,15 +102,17 @@ void grid::printEverything(){
         }
         std::cout<<"\n";
     }
-    std::cout<<"~~~~~~~~~~~~~~~~~addresses~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    std::cout<<"~~~~~~~~~~~~~~~~~loc of previous~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
-            node* present = g(i,j).pointerToPrevious;
-            std::cout<<std::setw(3)<<present<<" ";
+            loc present = g(i,j).locOfPrevious;
+            std::cout<<std::setw(3)<<present.row<<" "<<present.col<<" ";
         }
         std::cout<<"\n";
         std::cout<<"\n";
     }
+    std::cout<<"~~~~~~~~~~~~~~~~~~~~~value:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    this->print();
 }
 
 void grid::setStart(loc l){
@@ -212,13 +213,13 @@ void grid::calcDistOfAllValidAdj(loc l){
                 if(g(r,c).distance == -1){ // if it hasn't been visited yet, this updates the new distance. Otherwise, see the else statement for distance check.
                     this->setNodeDistance({r,c},this->getNodeDistance(l)+this->calcDist(l,{r,c}));
                     //std::cout<<this->getNodeDistance(l)+this->calcDist(l,{r,c})<<" in calcDistOfAllValidAdj func "<<std::endl;
-                    this->setNodePointerToPrev(l,{r,c}); //update the pointer to current l; /////////////////////////////////////////Pass By Reference Errors?
+                    this->setNodeLocToPrevious(l,{r,c});//update the pointer to current l; /////////////////////////////////////////Pass By Reference Errors?
 
                 }
                 else{ // If it has been visited, check to see if this way is shorter. if so, update  like the previous two lines. else, do nothing.
                     if(this->getNodeDistance({r,c}) > this->getNodeDistance(l)+this->calcDist(l,{r,c})){
                         this->setNodeDistance({r,c},this->getNodeDistance(l)+this->calcDist(l,{r,c}));
-                        this->setNodePointerToPrev(l,{r,c});
+                        this->setNodeLocToPrevious(l,{r,c});
                     }
                 }
             }
@@ -275,10 +276,19 @@ bool grid::getNodeVisited(loc l){
     return g(l.row,l.col).visited;
 }
 
-void grid::setNodePointerToPrev(loc current, loc additional_which_points_back){  /////////////////// Area of Concern.  Ref vs value could still be a problem.
-    //g(additional_which_points_back.row,additional_which_points_back.col).pointerToPrevious = &(this->getNode(current));
+//void grid::setNodePointerToPrev(loc current, loc additional_which_points_back){  /////////////////// Area of Concern.  Ref vs value could still be a problem.
+//    //g(additional_which_points_back.row,additional_which_points_back.col).pointerToPrevious = &(this->getNode(current));
+//}
+
+//node* grid::getNodePointerToPrev(loc l){
+//    return g(l.row,l.col).pointerToPrevious;
+//}
+
+/*              hacky methods                                    */
+void grid::setNodeLocToPrevious(loc current, loc pointsBack){
+    g(pointsBack.row,pointsBack.col).locOfPrevious = current;
 }
 
-node* grid::getNodePointerToPrev(loc l){
-    return g(l.row,l.col).pointerToPrevious;
+loc grid::getWhereNodePoints(loc it){
+    return g(it.row,it.col).locOfPrevious;
 }

@@ -12,46 +12,18 @@
 
 int main(){
 
-    grid myG(10,10);
-
-//    myG.fill(0,0,5,5);
-//    myG.clear(1,1,3,3);
-//    myG.setGoal({1,1});
-//    myG.setStart({3,3});
-    myG.testConfig();
+    grid myG(20,20);
+    myG.fill(0,0,20,20);
+    myG.clear(1,1,18,18);
+    myG.setGoal({15,7});
+    myG.setStart({6,6});
+    //myG.testConfig();
     myG.printEverything();
-
-//    myG.print();
-//    myG.calcDistOfAllValidAdj(myG.getStart());
-//    std::cout<<myG.getNodeDistance({4,4});
 
     pathfinder finder(myG);
     finder.findPath();
     finder.getSolved().printEverything();
 
-
-//    node n1;
-//    node n2;
-//    node n3;
-//    n2.pointerToPrevious = &n1;
-//    n3.pointerToPrevious = &n2;
-
-//    node* index = &n3;
-//    while(index != NULL){
-//        std::cout<<index->pointerToPrevious<<std::endl;
-//        index = index->pointerToPrevious;
-//    }
-
-
-//    std::vector<int> test;
-//    test.push_back(1);
-//    test.push_back(2);
-//    //std::cout<<test.capacity();
-//    std::vector<int>::iterator testIterator;
-//    for(testIterator = test.begin(); testIterator != test.end(); testIterator++){
-//        std::cout<<*testIterator<<std::endl;
-//        //std::cout<<*testIterator.col<<std::endl;
-//    }
 
     return 1;
 }

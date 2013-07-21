@@ -9,7 +9,9 @@ node::node()
     value = 0;
     distance = -1;
     visited = false;
-    pointerToPrevious = NULL;
+    //pointerToPrevious = NULL;
+    locOfPrevious.row = -1;
+    locOfPrevious.col = -1;
 
 }
 

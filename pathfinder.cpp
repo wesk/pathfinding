@@ -39,10 +39,11 @@ bool pathfinder::findPath(){ // The Core. Dijkstra
 }
 
 void pathfinder::updateGraph(){ // This steps backwards to the start, folowing the winning path.
-    node* current = gr.getNodePointerToPrev(gr.getGoal());
-    while(current != NULL){
-        current->value = 2;
-        current = current->pointerToPrevious;
+    loc current = gr.getWhereNodePoints(gr.getGoal());
+    loc start = gr.getStart();
+    while(!(current.row == start.row && current.col == start.col)){ //while the current loc is not the start loc
+        gr.setNodeValue(current,2);
+        current = gr.getWhereNodePoints(current);
     }
 }
 
