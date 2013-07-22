@@ -14,7 +14,7 @@ class pathfinder
 {
 private:
     grid gr;
-    int a = 120;
+    //int a = 120;
 public:
     pathfinder(grid &gr);
     bool findPath();

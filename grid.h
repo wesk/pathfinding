@@ -36,7 +36,7 @@ public:
     bool areAdjacent(loc a, loc b);
     double calcDist(loc a, loc b);
 
-    void calcDistOfAllValidAdj(loc l);
+    std::vector<loc> calcDistOfAllValidAdj(loc l);
     std::vector<loc> getAllActiveUnfinalized();
 
     void setNodeValue(loc l, int v);

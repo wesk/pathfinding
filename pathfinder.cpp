@@ -13,29 +13,36 @@ pathfinder::pathfinder(grid &g) : gr(g) //Initialization Lists! Did not know thi
 
 }
 
-bool pathfinder::findPath(){ // The Core. Dijkstra
-
-
-    gr.calcDistOfAllValidAdj(gr.getStart());
+bool pathfinder::findPath(){
 
     std::vector<loc> theMasterList;
+    std::vector<loc> theSecondaryList;
     //theMasterList= gr.getAllActiveUnfinalized();
-
     std::cout<<"inside findpath method\n";
-    do{
-        theMasterList= gr.getAllActiveUnfinalized();
+    theMasterList = gr.calcDistOfAllValidAdj(gr.getStart());
+
+    int unsigned index = 0;
+    while((gr.getNodeVisited(gr.getGoal()) == false && index < theMasterList.capacity())/* || theMasterList.capacity() != 0*/){
+
         std::cout<<"main loop running\n";
-        for(unsigned int index = 0; index < theMasterList.capacity(); index ++){
-            gr.calcDistOfAllValidAdj(theMasterList[index]);
-        }
+
+        theSecondaryList = gr.calcDistOfAllValidAdj(theMasterList[index]);
+        theMasterList.insert(theMasterList.end(), theSecondaryList.begin(), theSecondaryList.end());
+
+        index ++;
+
     }
-    while(theMasterList.capacity() != 0);
+
+    std::cout<<"Goal Visited!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 
     if(gr.getNodeVisited(gr.getGoal()) == true){
         updateGraph();
         return true;
     }
-    return false;
+    else{
+        std::cout<<"Graph Not Solved\n";
+        return false;
+    }
 }
 
 void pathfinder::updateGraph(){ // This steps backwards to the start, folowing the winning path.

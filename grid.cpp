@@ -62,8 +62,10 @@ void grid::clear(int rowstart, int colstart, int rowlen, int collen){
 }
 
 void grid::outOfBound(loc amIOutOfRange){
+
     if(amIOutOfRange.row < 0 || amIOutOfRange.col < 0 || amIOutOfRange.row >= g.rows() || amIOutOfRange.col >= g.cols()){
-        throw "Input Out Of Range Error!";
+        std::cout<<"THE PROGRAM WILL CRASH, outOfBound detects an out-of-grid-range loc!\n";
+        std::cout<<amIOutOfRange.row<<" "<<amIOutOfRange.col<<std::endl;
     }
 }
 
@@ -155,7 +157,7 @@ bool grid::areAdjacent(loc a, loc b){
     outOfBound(a);
     outOfBound(b);
     //if(!(a.row == b.row && a.col == b.col)){  // Special case: should return true, even if a and b are the same
-        if((abs(a.row-b.row)) <= 1 && abs(a.col-b.col) <= 1){
+        if(((abs(a.row-b.row)) <= 1) && (abs(a.col-b.col) <= 1)){
             return true;
         }
     //}
@@ -165,7 +167,7 @@ bool grid::areAdjacent(loc a, loc b){
 double grid::calcDist(loc a, loc b){ // Precondition: Must be Adjacent! true is diagonal, false is orthogonal.
 
     if(areAdjacent(a,b)){
-        if(abs(a.row-b.row) == 1 && abs(a.col-b.col) == 1){
+        if((abs(a.row-b.row) == 1) && (abs(a.col-b.col) == 1)){
             return 1.4; //Diagonal Case
         }
 
@@ -175,7 +177,7 @@ double grid::calcDist(loc a, loc b){ // Precondition: Must be Adjacent! true is 
         if(abs(a.col-b.col) == 1){
             return 1;
         }
-        return 99999999;
+        return 99999999; //a and b are the same.
     }
     std::cout<<"Something funky is going on here, fix the problem!\n";
     return 9999999;
@@ -185,9 +187,10 @@ double grid::calcDist(loc a, loc b){ // Precondition: Must be Adjacent! true is 
 
 // Here are the more important methods:
 
-void grid::calcDistOfAllValidAdj(loc l){
+std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This could return a vector of locs, to pass to another function, instead of getAllActiveUnfinalized
 
     outOfBound(l);
+    std::cout<<"in calcDistOfAllValidAjd method, current loc is: "<<l.row<<" "<<l.col<<std::endl;
     int rowstart,rowend,colstart,colend;
     rowstart = l.row;
     rowend = l.row;
@@ -199,22 +202,24 @@ void grid::calcDistOfAllValidAdj(loc l){
     if(l.col > 0){
         colstart = l.col-1;
     }
-    if(l.row < g.rows()-1){
+    if(l.row < (g.rows()-1)){
         rowend = l.row+1;
     }
-    if(l.col < g.cols()-1){
+    if(l.col < (g.cols()-1)){
         colend = l.col+1;
     }
     //int numberoflocs = 0;
 
-    for(int r = rowstart; r <= rowend; r++){
+    std::vector<loc> listOfNewLocs;
+
+    for(int r = rowstart; r <= rowend; r++){// <=, not just <
         for(int c = colstart; c <= colend; c++){
             if(!(g(r,c).value == 1)){// anything but 1. 1 means full. //Clean up syntax here, use the setNode.. getNode... blablalba
                 if(g(r,c).distance == -1){ // if it hasn't been visited yet, this updates the new distance. Otherwise, see the else statement for distance check.
                     this->setNodeDistance({r,c},this->getNodeDistance(l)+this->calcDist(l,{r,c}));
                     //std::cout<<this->getNodeDistance(l)+this->calcDist(l,{r,c})<<" in calcDistOfAllValidAdj func "<<std::endl;
-                    this->setNodeLocToPrevious(l,{r,c});//update the pointer to current l; /////////////////////////////////////////Pass By Reference Errors?
-
+                    this->setNodeLocToPrevious(l,{r,c});
+                    listOfNewLocs.push_back({r,c}); // adds the loc to the new list of where to still search
                 }
                 else{ // If it has been visited, check to see if this way is shorter. if so, update  like the previous two lines. else, do nothing.
                     if(this->getNodeDistance({r,c}) > this->getNodeDistance(l)+this->calcDist(l,{r,c})){
@@ -226,6 +231,7 @@ void grid::calcDistOfAllValidAdj(loc l){
         }
     }
     this->setNodeVisited(l,true);
+    return listOfNewLocs;
 }
 
 std::vector<loc> grid::getAllActiveUnfinalized(){  // Using STL Vector Instead

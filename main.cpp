@@ -12,9 +12,11 @@
 
 int main(){
 
+
     grid myG(20,20);
     myG.fill(0,0,20,20);
     myG.clear(1,1,18,18);
+    myG.fill(11,2,1,10);
     myG.setGoal({15,7});
     myG.setStart({6,6});
     //myG.testConfig();
