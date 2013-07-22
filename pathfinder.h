@@ -21,10 +21,7 @@ public:
     grid getSolved();
     void modifyTest();
 
-
 private:
-//    void calcDistOfAllAdj(loc l); //then, sets node as visited.
-//    Eigen::Matrix<loc,Eigen::Dynamic,1> getAllActive_Unfinalized(); // returns vector of locs of nodes. each has distance != 1 && visited = false
     void updateGraph();
 };
 

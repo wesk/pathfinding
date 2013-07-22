@@ -24,13 +24,9 @@ bool pathfinder::findPath(){
     int unsigned index = 0;
     while((gr.getNodeVisited(gr.getGoal()) == false && index < theMasterList.capacity())/* || theMasterList.capacity() != 0*/){
 
-        //std::cout<<"main loop running\n";
-
         theSecondaryList = gr.calcDistOfAllValidAdj(theMasterList[index]);
         theMasterList.insert(theMasterList.end(), theSecondaryList.begin(), theSecondaryList.end());
-
         index ++;
-
     }
 
     std::cout<<"Main findPath loop exiting\n";
@@ -52,11 +48,12 @@ bool pathfinder::findPath(){
 }
 
 void pathfinder::updateGraph(){ // This steps backwards to the start, folowing the winning path.
-    loc current = gr.getWhereNodePoints(gr.getGoal());
-    loc start = gr.getStart();
-    while(!(current.row == start.row && current.col == start.col)){ //while the current loc is not the start loc
-        gr.setNodeValue(current,2);
-        current = gr.getWhereNodePoints(current);
+
+    node* current = gr.getAddressOfNode(gr.getGoal());
+    current = current->pointerToPrevious; // to avoid overwriting the goal (4) value
+    while(current != gr.getAddressOfNode(gr.getStart())){ // same as above, for start(3)
+        current->value = 2;
+        current = current->pointerToPrevious;
     }
 }
 

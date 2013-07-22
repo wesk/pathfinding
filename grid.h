@@ -29,29 +29,19 @@ public:
     void print();
     void printEverything();
     void outOfBound(loc amIOutOfRange); // returns to ensure input is legal.
-
-    node getNode(loc l);
-
-
+    node* getAddressOfNode(loc l);
     bool areAdjacent(loc a, loc b);
     double calcDist(loc a, loc b);
-
     std::vector<loc> calcDistOfAllValidAdj(loc l);
     std::vector<loc> getAllActiveUnfinalized();
-
     void setNodeValue(loc l, int v);
     void setNodeDistance(loc l, double d);
     void setNodeVisited(loc l, bool b);
-
     int getNodeValue(loc l);
     double getNodeDistance(loc l);
     bool getNodeVisited(loc l);
-
-//    node* getNodePointerToPrev(loc l); // Temporarily Removed. Replacing with loc instead. less efficient obviously.
-//    void setNodePointerToPrev(loc current, loc additional_which_points_back);
-
+    void setNodePointerToPrev(loc current, loc additional_which_points_back);
     void setNodeLocToPrevious(loc current, loc pointsBack);
-    loc getWhereNodePoints(loc it);
 
 };
 

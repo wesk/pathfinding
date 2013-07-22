@@ -107,11 +107,11 @@ void grid::printEverything(){
         }
         std::cout<<"\n";
     }
-    std::cout<<"~~~~~~~~~~~~~~~~~loc of previous~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    std::cout<<"~~~~~~~~~~~~~~~~~address of previous~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
-            loc present = g(i,j).locOfPrevious;
-            std::cout<<std::setw(3)<<present.row<<" "<<present.col<<" ";
+            node* present = g(i,j).pointerToPrevious;
+            std::cout<<std::setw(8)<<present<<" ";
         }
         std::cout<<"\n";
         std::cout<<"\n";
@@ -120,39 +120,53 @@ void grid::printEverything(){
     this->print();
 }
 
-void grid::setStart(loc l){
-    start = l;
-    g(l.row,l.col).value = 3;
-    this->setNodeDistance(l,0);
 
-}
+std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This returns a vector of locs, to pass to another function, instead of getAllActiveUnfinalized. This is the most important method.
 
-void grid::setGoal(loc l){
-    goal = l;
-    g(l.row,l.col).value = 4;
-}
+    outOfBound(l);
+    //std::cout<<"in calcDistOfAllValidAjd method, current loc is: "<<l.row<<" "<<l.col<<std::endl;
+    int rowstart,rowend,colstart,colend;
+    rowstart = l.row;
+    rowend = l.row;
+    colstart = l.col;
+    colend = l.col;
+    if(l.row > 0){
+        rowstart = l.row-1;
+    }
+    if(l.col > 0){
+        colstart = l.col-1;
+    }
+    if(l.row < (g.rows()-1)){
+        rowend = l.row+1;
+    }
+    if(l.col < (g.cols()-1)){
+        colend = l.col+1;
+    }
+    //int numberoflocs = 0;
 
-loc grid::getStart(){
-    return start;
-}
+    std::vector<loc> listOfNewLocs;
 
-loc grid::getGoal(){
-    return goal;
-}
-
-void grid::testConfig(){
-    std::cout<<"You have chosen the convenient testing constructor\n";
-    g.resize(10,10);
-    this->fill(0,0,10,10);
-    this->clear(1,1,8,8);
-    this->fill(0,2,5,1);
-    this->fill(0,3,5,1);
-    this->fill(3,5,7,1);
-    this->fill(3,6,7,1);
-    loc s {6,3};
-    loc gg {4,7};
-    this->setStart(s);
-    this->setGoal(gg);
+    for(int r = rowstart; r <= rowend; r++){// <=, not just <
+        for(int c = colstart; c <= colend; c++){
+            if(!(g(r,c).value == 1)){// anything but 1. 1 means full. //Clean up syntax here, use the setNode.. getNode... blablalba
+                if(g(r,c).distance == -1){ // if it hasn't been visited yet, this updates the new distance. Otherwise, see the else statement for distance check.
+                    this->setNodeDistance({r,c},this->getNodeDistance(l)+this->calcDist(l,{r,c}));
+                    //this->setNodeLocToPrevious(l,{r,c});
+                    this->setNodePointerToPrev(l,{r,c}); //pointer method
+                    listOfNewLocs.push_back({r,c}); // adds the loc to the new list of where to still search
+                }
+                else{ // If it has been visited, check to see if this way is shorter. if so, update  like the previous two lines. else, do nothing.
+                    if(this->getNodeDistance({r,c}) > this->getNodeDistance(l)+this->calcDist(l,{r,c})){
+                        this->setNodeDistance({r,c},this->getNodeDistance(l)+this->calcDist(l,{r,c}));
+                        //this->setNodeLocToPrevious(l,{r,c});
+                        this->setNodePointerToPrev(l,{r,c});
+                    }
+                }
+            }
+        }
+    }
+    this->setNodeVisited(l,true);
+    return listOfNewLocs;
 }
 
 bool grid::areAdjacent(loc a, loc b){
@@ -188,77 +202,45 @@ double grid::calcDist(loc a, loc b){ // Precondition: Must be Adjacent! true is 
 }
 
 
-// Here are the more important methods:
-
-std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This could return a vector of locs, to pass to another function, instead of getAllActiveUnfinalized
-
-    outOfBound(l);
-    //std::cout<<"in calcDistOfAllValidAjd method, current loc is: "<<l.row<<" "<<l.col<<std::endl;
-    int rowstart,rowend,colstart,colend;
-    rowstart = l.row;
-    rowend = l.row;
-    colstart = l.col;
-    colend = l.col;
-    if(l.row > 0){
-        rowstart = l.row-1;
-    }
-    if(l.col > 0){
-        colstart = l.col-1;
-    }
-    if(l.row < (g.rows()-1)){
-        rowend = l.row+1;
-    }
-    if(l.col < (g.cols()-1)){
-        colend = l.col+1;
-    }
-    //int numberoflocs = 0;
-
-    std::vector<loc> listOfNewLocs;
-
-    for(int r = rowstart; r <= rowend; r++){// <=, not just <
-        for(int c = colstart; c <= colend; c++){
-            if(!(g(r,c).value == 1)){// anything but 1. 1 means full. //Clean up syntax here, use the setNode.. getNode... blablalba
-                if(g(r,c).distance == -1){ // if it hasn't been visited yet, this updates the new distance. Otherwise, see the else statement for distance check.
-                    this->setNodeDistance({r,c},this->getNodeDistance(l)+this->calcDist(l,{r,c}));
-                    //std::cout<<this->getNodeDistance(l)+this->calcDist(l,{r,c})<<" in calcDistOfAllValidAdj func "<<std::endl;
-                    this->setNodeLocToPrevious(l,{r,c});
-                    listOfNewLocs.push_back({r,c}); // adds the loc to the new list of where to still search
-                }
-                else{ // If it has been visited, check to see if this way is shorter. if so, update  like the previous two lines. else, do nothing.
-                    if(this->getNodeDistance({r,c}) > this->getNodeDistance(l)+this->calcDist(l,{r,c})){
-                        this->setNodeDistance({r,c},this->getNodeDistance(l)+this->calcDist(l,{r,c}));
-                        this->setNodeLocToPrevious(l,{r,c});
-                    }
-                }
-            }
-        }
-    }
-    this->setNodeVisited(l,true);
-    return listOfNewLocs;
+void grid::testConfig(){
+    std::cout<<"You have chosen the convenient testing constructor\n";
+    g.resize(10,10);
+    this->fill(0,0,10,10);
+    this->clear(1,1,8,8);
+    this->fill(0,2,5,1);
+    this->fill(0,3,5,1);
+    this->fill(3,5,7,1);
+    this->fill(3,6,7,1);
+    loc s {6,3};
+    loc gg {4,7};
+    this->setStart(s);
+    this->setGoal(gg);
 }
 
-//std::vector<loc> grid::getAllActiveUnfinalized(){  // Using STL Vector Instead
+// The remaining methods are simple getters and setters, for convenience. Not really needed.
 
-//    std::cout<<"Inside getAllActiveUnfinalized Method\n";
-//    std::vector<loc> list;
-//    for(int rowz = 0; rowz < g.rows(); rowz++){
-//        for(int colz = 0; colz < g.cols(); colz++){ /////COLZ! NOT ROWZ!
-//            //std::cout<<"we're in\n";
-//            if((this->getNodeVisited({rowz,colz}) == false) /*has not been visited Must set all obstacle 1's to Visited!!!*/ && (this->getNodeDistance({rowz,colz}) != -1) /*dist not -1*/){
-//                list.push_back({rowz,colz});
-//            }
-//            //std::cout<<"we're out\n";
-//        }
-//    }
-//    return list;
-//}
+void grid::setStart(loc l){
+    start = l;
+    g(l.row,l.col).value = 3;
+    this->setNodeDistance(l,0);
 
-// End *important* methods
+}
 
-// the last 8 methods in grid.cpp are setter and getter methods to modify the lowest level stuff.
+void grid::setGoal(loc l){
+    goal = l;
+    g(l.row,l.col).value = 4;
+}
 
-node grid::getNode(loc l){
-    return g(l.row,l.col);
+loc grid::getStart(){
+    return start;
+}
+
+loc grid::getGoal(){
+    return goal;
+}
+
+node* grid::getAddressOfNode(loc l){
+    return &g(l.row,l.col);
 }
 
 void grid::setNodeValue(loc l,int v){
@@ -285,19 +267,6 @@ bool grid::getNodeVisited(loc l){
     return g(l.row,l.col).visited;
 }
 
-//void grid::setNodePointerToPrev(loc current, loc additional_which_points_back){  /////////////////// Area of Concern.  Ref vs value could still be a problem.
-//    //g(additional_which_points_back.row,additional_which_points_back.col).pointerToPrevious = &(this->getNode(current));
-//}
-
-//node* grid::getNodePointerToPrev(loc l){
-//    return g(l.row,l.col).pointerToPrevious;
-//}
-
-/*              hacky methods                                    */
-void grid::setNodeLocToPrevious(loc current, loc pointsBack){
-    g(pointsBack.row,pointsBack.col).locOfPrevious = current;
-}
-
-loc grid::getWhereNodePoints(loc it){
-    return g(it.row,it.col).locOfPrevious;
+void grid::setNodePointerToPrev(loc current, loc additional_which_points_back){  /////////////////// Area of Concern.  Ref vs value could still be a problem.
+    g(additional_which_points_back.row,additional_which_points_back.col).pointerToPrevious = this->getAddressOfNode(current);
 }
