@@ -24,7 +24,7 @@ bool pathfinder::findPath(){
     int unsigned index = 0;
     while((gr.getNodeVisited(gr.getGoal()) == false && index < theMasterList.capacity())/* || theMasterList.capacity() != 0*/){
 
-        std::cout<<"main loop running\n";
+        //std::cout<<"main loop running\n";
 
         theSecondaryList = gr.calcDistOfAllValidAdj(theMasterList[index]);
         theMasterList.insert(theMasterList.end(), theSecondaryList.begin(), theSecondaryList.end());
@@ -33,7 +33,13 @@ bool pathfinder::findPath(){
 
     }
 
-    std::cout<<"Goal Visited!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+    std::cout<<"Main findPath loop exiting\n";
+    if(gr.getNodeVisited(gr.getGoal()) == true){
+        std::cout<<"Goal Visited!\n";
+    }
+    else{
+        std::cout<<"goal NOT visited\n";
+    }
 
     if(gr.getNodeVisited(gr.getGoal()) == true){
         updateGraph();

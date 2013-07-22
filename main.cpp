@@ -13,18 +13,28 @@
 int main(){
 
 
-    grid myG(20,20);
-    myG.fill(0,0,20,20);
-    myG.clear(1,1,18,18);
-    myG.fill(11,2,1,10);
-    myG.setGoal({15,7});
-    myG.setStart({6,6});
-    //myG.testConfig();
+    //grid myG(20,20);
+    //myG.fill(0,0,20,20);
+    //myG.clear(1,1,18,18);
+    //myG.fill(11,2,1,10);
+    //myG.fill(6,8,5,1);
+    //myG.setGoal({12,7});
+    //myG.setStart({6,6});
+    grid myG(10,10);
+    myG.testConfig();
+    myG.fill(4,4,1,1);
     myG.printEverything();
 
     pathfinder finder(myG);
-    finder.findPath();
-    finder.getSolved().printEverything();
+
+    if(!finder.findPath()){
+        finder.getSolved().printEverything();
+        std::cout<<"No Path Found                  No Path Found                           No Path Found                                No Path Found\n";
+    }
+    else{
+        finder.getSolved().printEverything();
+    }
+
 
 
     return 1;

@@ -76,6 +76,9 @@ void grid::print(){
             if(present == 0){
                 std::cout<<"  ";
             }
+            else if(present == 2){
+                std::cout<<(char)0x40<<" ";
+            }
             else{
                 std::cout<<present<<" ";
             }
@@ -190,7 +193,7 @@ double grid::calcDist(loc a, loc b){ // Precondition: Must be Adjacent! true is 
 std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This could return a vector of locs, to pass to another function, instead of getAllActiveUnfinalized
 
     outOfBound(l);
-    std::cout<<"in calcDistOfAllValidAjd method, current loc is: "<<l.row<<" "<<l.col<<std::endl;
+    //std::cout<<"in calcDistOfAllValidAjd method, current loc is: "<<l.row<<" "<<l.col<<std::endl;
     int rowstart,rowend,colstart,colend;
     rowstart = l.row;
     rowend = l.row;
