@@ -237,21 +237,21 @@ std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This could return a vec
     return listOfNewLocs;
 }
 
-std::vector<loc> grid::getAllActiveUnfinalized(){  // Using STL Vector Instead
+//std::vector<loc> grid::getAllActiveUnfinalized(){  // Using STL Vector Instead
 
-    std::cout<<"Inside getAllActiveUnfinalized Method\n";
-    std::vector<loc> list;
-    for(int rowz = 0; rowz < g.rows(); rowz++){
-        for(int colz = 0; colz < g.cols(); colz++){ /////COLZ! NOT ROWZ!
-            //std::cout<<"we're in\n";
-            if((this->getNodeVisited({rowz,colz}) == false) /*has not been visited Must set all obstacle 1's to Visited!!!*/ && (this->getNodeDistance({rowz,colz}) != -1) /*dist not -1*/){
-                list.push_back({rowz,colz});
-            }
-            //std::cout<<"we're out\n";
-        }
-    }
-    return list;
-}
+//    std::cout<<"Inside getAllActiveUnfinalized Method\n";
+//    std::vector<loc> list;
+//    for(int rowz = 0; rowz < g.rows(); rowz++){
+//        for(int colz = 0; colz < g.cols(); colz++){ /////COLZ! NOT ROWZ!
+//            //std::cout<<"we're in\n";
+//            if((this->getNodeVisited({rowz,colz}) == false) /*has not been visited Must set all obstacle 1's to Visited!!!*/ && (this->getNodeDistance({rowz,colz}) != -1) /*dist not -1*/){
+//                list.push_back({rowz,colz});
+//            }
+//            //std::cout<<"we're out\n";
+//        }
+//    }
+//    return list;
+//}
 
 // End *important* methods
 
