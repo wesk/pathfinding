@@ -22,7 +22,7 @@ public:
     void modifyTest();
 
     //void dstarHeuristicSort(std::vector<loc> &list);
-    bool manhattanHeuristic(loc i, loc j);
+    static bool manhattanHeuristic(const loc &i, const loc &j);
     int manhattanDist(loc l);
     bool returnTrue();
     void personalSortingAlgorithm(std::vector<loc> &l);
