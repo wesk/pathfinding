@@ -13,6 +13,11 @@ grid::grid(int numRows, int numCols){
     g.resize(numRows,numCols);
 }
 
+void grid::fillSingle(int r, int c){
+    g(r,c).value = 1;
+    g(r,c).visited = true;
+}
+
 void grid::fill(int rowstart,int colstart,int rowlen,int collen){
     loc myLoc;
     myLoc.row = rowstart;
@@ -202,20 +207,20 @@ double grid::calcDist(loc a, loc b){ // Precondition: Must be Adjacent! true is 
 }
 
 
-void grid::testConfig(){
-    std::cout<<"You have chosen the convenient testing constructor\n";
-    g.resize(10,10);
-    this->fill(0,0,10,10);
-    this->clear(1,1,8,8);
-    this->fill(0,2,5,1);
-    this->fill(0,3,5,1);
-    this->fill(3,5,7,1);
-    this->fill(3,6,7,1);
-    loc s {6,3};
-    loc gg {4,7};
-    this->setStart(s);
-    this->setGoal(gg);
-}
+//void grid::testConfig(){
+//    std::cout<<"You have chosen the convenient testing constructor\n";
+//    g.resize(10,10);
+//    this->fill(0,0,10,10);
+//    this->clear(1,1,8,8);
+//    this->fill(0,2,5,1);
+//    this->fill(0,3,5,1);
+//    this->fill(3,5,7,1);
+//    this->fill(3,6,7,1);
+//    loc s {6,3};
+//    loc gg {4,7};
+//    this->setStart(s);
+//    this->setGoal(gg);
+//}
 
 // The remaining methods are simple getters and setters, for convenience. Not really needed.
 

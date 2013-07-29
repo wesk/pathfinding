@@ -21,6 +21,7 @@ public:
     grid(int numRows, int numCols);
     void fill(int rowstart, int colstart, int rowlen, int collen);
     void clear(int rowstart, int colstart, int rowlen, int collen);
+    void fillSingle(int r, int c);
     void setStart(loc l);
     void setGoal(loc l);
     loc getStart();
