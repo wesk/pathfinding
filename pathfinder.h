@@ -21,6 +21,10 @@ public:
     grid getSolved();
     void modifyTest();
 
+    void dstarHeuristicSort(std::vector<loc> &list);
+    bool manhattanHeuristic(loc i, loc j);
+    bool returnTrue();
+
 private:
     void updateGraph();
 };

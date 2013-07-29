@@ -16,14 +16,14 @@ int main(){
     g.clear(1,1,38,38);
     g.setStart({3,3});
     g.setGoal({30,35});
-    g.fill(4,0,1,35);
-    g.fill(10,4,1,36);
-    g.fill(15,0,1,35);
-    g.fill(20,4,1,36);
-    g.fill(25,0,1,35);
-    g.fill(15,16,4,2);
-    g.fill(17,12,4,2);
-    g.fill(20,15,4,2);
+//    g.fill(4,0,1,35);
+//    g.fill(10,4,1,36);
+//    g.fill(15,0,1,35);
+//    g.fill(20,4,1,36);
+//    g.fill(25,0,1,35);
+//    g.fill(15,16,4,2);
+//    g.fill(17,12,4,2);
+//    g.fill(20,15,4,2);
     g.print();
 
     pathfinder p(g);
