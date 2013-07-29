@@ -29,7 +29,8 @@ bool pathfinder::findPath(){
         theSecondaryList = gr.calcDistOfAllValidAdj(theMasterList[0]);
         theMasterList.erase(theMasterList.begin()); // erase first term
         theMasterList.insert(theMasterList.end(), theSecondaryList.begin(), theSecondaryList.end());
-        std::sort(theMasterList.begin(),theMasterList.end(),true);
+        //std::sort(theMasterList.begin(),theMasterList.end(),pathfinder::manhattanHeuristic);
+        personalSortingAlgorithm(theMasterList);
 
     }
 
@@ -57,19 +58,32 @@ bool pathfinder::returnTrue(){
 
 ///////////////// Astar
 bool pathfinder::manhattanHeuristic(loc i, loc j){ //manhattan distance
-    //loc goal = gr.getGoal();
-//    loc goal;
-//    goal.row = 100;
-//    goal.col = 100;
-
-//    return ((abs(goal.row - i.row) + abs(goal.col - i.col)) > (abs(goal.row - j.row) + abs(goal.col - j.col)));
-    return true;
+    loc goal = gr.getGoal();
+    return ((abs(goal.row - i.row) + abs(goal.col - i.col)) > (abs(goal.row - j.row) + abs(goal.col - j.col)));
 }
 
-//void pathfinder::dstarHeuristicSort(std::vector<loc> &list){
-//    std::sort(list.begin(),list.end(),pathfinder::manhattanHeuristic);
-//    //std::vector<loc> sorted =  std::sort(list.begin(),list.end(),pathfinder::manhattanHeuristic);
-//}
+int pathfinder::manhattanDist(loc l){
+    loc goal = gr.getGoal();
+    return (abs(goal.row - l.row) + abs(goal.col - l.col));
+}
+
+void pathfinder::personalSortingAlgorithm(std::vector<loc> &l){
+    //selection sort
+    int current;
+    int smallest;
+    for(unsigned int i = 0; i < l.capacity(); i++){
+        current = i;
+        for(unsigned int j = i+1; j < l.capacity(); ++j){
+            if((manhattanDist(l[j]) < manhattanDist(l[current]))){
+                smallest = j;
+            }
+        }
+        int temp = current;
+        l[current] = l[smallest];
+        l[smallest] = l[temp];
+    }
+}
+
 /////////////end astar
 
 void pathfinder::updateGraph(){ // This steps backwards to the start, folowing the winning path.
