@@ -3,6 +3,10 @@ pathfinding
 
 simple breadth-first search algorithm over 2d binary occupancy grid
 
+Dependencies:
+* [pangolin](https://github.com/stevenlovegrove/pangolin)
+* [eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page)
+
 Setup:
 * mkdir build
 * cd build
