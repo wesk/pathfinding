@@ -16,22 +16,36 @@ pathfinder::pathfinder(grid &g) : gr(g) //Initialization Lists! Did not know thi
 
 }
 
+//bool pathfinder::findClosest(loc_heur i, loc_heur j){
+//    return( (i.heuristic) > (j.heuristic));
+//}
+
+int pathfinder::findMin(std::vector<loc_heur> it){
+    int min = 0;
+    for(unsigned int i = 1; i < it.capacity(); i++){
+        if(it[i].heuristic < it[min].heuristic){
+            min = i;
+        }
+    }
+    return min;
+}
+
 bool pathfinder::findPath(){
 
-//    std::vector<loc> theMasterList;
-//    std::vector<loc> theSecondaryList;
-    list_heuristic Master;
-    list_heuristic Secondary;
+    std::vector<loc_heur> Master;
+    std::vector<loc_heur> Secondary;
     std::cout<<"inside findpath method\n";
     Master = gr.calcDistOfAllValidAdj(gr.getStart());
 
     //int unsigned index = 0;
+    int current = 0;
     while((gr.getNodeVisited(gr.getGoal()) == false &&
-           Master.listOfLocs.capacity() != 0)){
+           Master.capacity() != 0))              {
 
-        Secondary = gr.calcDistOfAllValidAdj(Master.listOfLocs[0]);
-        Master.listOfLocs.erase(Master.listOfLocs.begin()); // erase first term
-        Master.listOfLocs.insert(Master.listOfLocs.end(), Secondary.listOfLocs.begin(), Secondary.listOfLocs.end());
+        current = findMin(Master); //heuristic findmin
+        Secondary = gr.calcDistOfAllValidAdj(Master[current].location);
+        Master.erase(Master.begin()+current); // erase first term
+        Master.insert(Master.end(), Secondary.begin(), Secondary.end());
         //std::min ()
     }
 

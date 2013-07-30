@@ -26,7 +26,7 @@ public:
     node* getAddressOfNode(loc l);
     bool areAdjacent(loc a, loc b);
     double calcDist(loc a, loc b);
-    list_heuristic calcDistOfAllValidAdj(loc l);
+    std::vector<loc_heur> calcDistOfAllValidAdj(loc l);
     //std::vector<loc> getAllActiveUnfinalized();
     void setNodeValue(loc l, int v);
     void setNodeDistance(loc l, double d);
@@ -37,6 +37,8 @@ public:
     void setNodePointerToPrev(loc current, loc additional_which_points_back);
     void setNodeLocToPrevious(loc current, loc pointsBack);
     int calcManhattanHeuristic(loc l);
+
+    int getHeurist(loc l);
 
 };
 

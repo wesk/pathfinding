@@ -129,7 +129,7 @@ void grid::printEverything(){
 }
 
 // This returns a vector of locs, to pass to another function, instead of getAllActiveUnfinalized. This is the most important method.
-list_heuristic grid::calcDistOfAllValidAdj(loc l){
+std::vector<loc_heur> grid::calcDistOfAllValidAdj(loc l){
     outOfBound(l);
     //std::cout<<"in calcDistOfAllValidAjd method, current loc is: "<<l.row<<" "<<l.col<<std::endl;
     int rowstart,rowend,colstart,colend;
@@ -151,7 +151,7 @@ list_heuristic grid::calcDistOfAllValidAdj(loc l){
     }
     //int numberoflocs = 0;
 
-    list_heuristic new_list;
+    std::vector<loc_heur> new_list;
 
     for(int r = rowstart; r <= rowend; r++){// <=, not just <
         for(int c = colstart; c <= colend; c++){
@@ -163,8 +163,12 @@ list_heuristic grid::calcDistOfAllValidAdj(loc l){
                     this->setNodePointerToPrev(l,{r,c}); //pointer method
 
                     // adds the loc to the new list of where to still search
-                    new_list.listOfLocs.push_back({r,c});
-                    //here we also need to do the heuristic!!!!!!!!!!!!!!
+                    loc_heur current;
+                    current.location = {r,c};
+                    current.heuristic = getHeurist({r,c});
+                    //current.p_heuristic =
+                    new_list.push_back(current);
+
                     //listOfNewLocs.push_back({r,c});
                 }
                 else{ // If it has been visited, check to see if this way is shorter. if so, update  like the previous two lines. else, do nothing.
@@ -266,6 +270,10 @@ loc grid::getGoal(){
 
 node* grid::getAddressOfNode(loc l){
     return &g(l.row,l.col);
+}
+
+int grid::getHeurist(loc l){
+    return g(l.row,l.col).heuristic;
 }
 
 void grid::setNodeValue(loc l,int v){

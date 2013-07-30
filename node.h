@@ -9,9 +9,9 @@ struct loc{
     int col;
 };
 
-struct list_heuristic{
-    std::vector<loc> listOfLocs;
-    int* p_heuristic;
+struct loc_heur{
+    loc location;
+    int heuristic;
 };
 
 class node
