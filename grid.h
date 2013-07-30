@@ -26,8 +26,8 @@ public:
     node* getAddressOfNode(loc l);
     bool areAdjacent(loc a, loc b);
     double calcDist(loc a, loc b);
-    std::vector<loc> calcDistOfAllValidAdj(loc l);
-    std::vector<loc> getAllActiveUnfinalized();
+    list_heuristic calcDistOfAllValidAdj(loc l);
+    //std::vector<loc> getAllActiveUnfinalized();
     void setNodeValue(loc l, int v);
     void setNodeDistance(loc l, double d);
     void setNodeVisited(loc l, bool b);

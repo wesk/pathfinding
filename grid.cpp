@@ -9,6 +9,7 @@
 #include <eigen3/Eigen/Eigen>
 #include <iomanip>
 
+
 grid::grid(int numRows, int numCols){
     g.resize(numRows,numCols);
 }
@@ -127,9 +128,8 @@ void grid::printEverything(){
     this->print();
 }
 
-
-std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This returns a vector of locs, to pass to another function, instead of getAllActiveUnfinalized. This is the most important method.
-
+// This returns a vector of locs, to pass to another function, instead of getAllActiveUnfinalized. This is the most important method.
+list_heuristic grid::calcDistOfAllValidAdj(loc l){
     outOfBound(l);
     //std::cout<<"in calcDistOfAllValidAjd method, current loc is: "<<l.row<<" "<<l.col<<std::endl;
     int rowstart,rowend,colstart,colend;
@@ -151,16 +151,21 @@ std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This returns a vector o
     }
     //int numberoflocs = 0;
 
-    std::vector<loc> listOfNewLocs;
+    list_heuristic new_list;
 
     for(int r = rowstart; r <= rowend; r++){// <=, not just <
         for(int c = colstart; c <= colend; c++){
-            if(!(g(r,c).value == 1)){// anything but 1. 1 means full. //Clean up syntax here, use the setNode.. getNode... blablalba
-                if(g(r,c).distance == -1){ // if it hasn't been visited yet, this updates the new distance. Otherwise, see the else statement for distance check.
+            if(!(g(r,c).value == 1)){// anything but 1. 1 means full.
+
+                // if it hasn't been visited yet, this updates the new distance. Otherwise, see the else statement for distance check.
+                if(g(r,c).distance == -1){
                     this->setNodeDistance({r,c},this->getNodeDistance(l)+this->calcDist(l,{r,c}));
-                    //this->setNodeLocToPrevious(l,{r,c});
                     this->setNodePointerToPrev(l,{r,c}); //pointer method
-                    listOfNewLocs.push_back({r,c}); // adds the loc to the new list of where to still search
+
+                    // adds the loc to the new list of where to still search
+                    new_list.listOfLocs.push_back({r,c});
+                    //here we also need to do the heuristic!!!!!!!!!!!!!!
+                    //listOfNewLocs.push_back({r,c});
                 }
                 else{ // If it has been visited, check to see if this way is shorter. if so, update  like the previous two lines. else, do nothing.
                     if(this->getNodeDistance({r,c}) > this->getNodeDistance(l)+this->calcDist(l,{r,c})){
@@ -173,8 +178,10 @@ std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This returns a vector o
         }
     }
     this->setNodeVisited(l,true);
-    return listOfNewLocs;
+    return new_list;
 }
+
+
 
 bool grid::areAdjacent(loc a, loc b){
 
@@ -241,15 +248,12 @@ void grid::setGoal(loc l){
     goal = l;
     g(l.row,l.col).value = 4;
     //set heuristic for all nodes in grid
-    //int count  = 0;
+
     for(int r = 0; r < g.rows(); r++){
         for(int c = 0; c < g.cols(); c++){
-            //++count;
             g(r,c).heuristic = calcManhattanHeuristic({r,c});
-            //std::cout<<calcManhattanHeuristic(l);
         }
     }
-    //std::cout<<count<<std::endl;
 }
 
 loc grid::getStart(){

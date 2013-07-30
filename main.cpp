@@ -19,16 +19,16 @@ int main(){
     g.fill(21,27,10,1);
 
     g.setStart({3,3});
-    g.setGoal({30,35});
+    g.setGoal({30,15});
     g.printEverything();
 
-//    pathfinder p(g);
-//    if(!p.findPath()){
-//        p.getSolved().printEverything();
-//        std::cout<<"No Path Found                  No Path Found                           No Path Found                                No Path Found\n";
-//    }
-//    else{
-//        p.getSolved().printEverything();
-//    }
+    pathfinder p(g);
+    if(!p.findPath()){
+        p.getSolved().printEverything();
+        std::cout<<"No Path Found                  No Path Found                           No Path Found                                No Path Found\n";
+    }
+    else{
+        p.getSolved().printEverything();
+    }
     return 1;
 }

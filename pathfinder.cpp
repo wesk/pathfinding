@@ -8,6 +8,9 @@
 #include <algorithm>
 #include "node.h"
 #include "pathfinder.h"
+
+
+
 pathfinder::pathfinder(grid &g) : gr(g) //Initialization Lists! Did not know this was needed.
 {
 
@@ -15,19 +18,21 @@ pathfinder::pathfinder(grid &g) : gr(g) //Initialization Lists! Did not know thi
 
 bool pathfinder::findPath(){
 
-    std::vector<loc> theMasterList;
-    std::vector<loc> theSecondaryList;
-    //theMasterList= gr.getAllActiveUnfinalized();
+//    std::vector<loc> theMasterList;
+//    std::vector<loc> theSecondaryList;
+    list_heuristic Master;
+    list_heuristic Secondary;
     std::cout<<"inside findpath method\n";
-    theMasterList = gr.calcDistOfAllValidAdj(gr.getStart());
+    Master = gr.calcDistOfAllValidAdj(gr.getStart());
 
     //int unsigned index = 0;
-    while((gr.getNodeVisited(gr.getGoal()) == false && theMasterList.capacity() != 0)/* || theMasterList.capacity() != 0*/){
+    while((gr.getNodeVisited(gr.getGoal()) == false &&
+           Master.listOfLocs.capacity() != 0)){
 
-        theSecondaryList = gr.calcDistOfAllValidAdj(theMasterList[0]);
-        theMasterList.erase(theMasterList.begin()); // erase first term
-        theMasterList.insert(theMasterList.end(), theSecondaryList.begin(), theSecondaryList.end());
-
+        Secondary = gr.calcDistOfAllValidAdj(Master.listOfLocs[0]);
+        Master.listOfLocs.erase(Master.listOfLocs.begin()); // erase first term
+        Master.listOfLocs.insert(Master.listOfLocs.end(), Secondary.listOfLocs.begin(), Secondary.listOfLocs.end());
+        //std::min ()
     }
 
     std::cout<<"Main findPath loop exiting\n";

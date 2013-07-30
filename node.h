@@ -1,9 +1,17 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <stdio.h>
+#include <vector>
+
 struct loc{
     int row;
     int col;
+};
+
+struct list_heuristic{
+    std::vector<loc> listOfLocs;
+    int* p_heuristic;
 };
 
 class node
