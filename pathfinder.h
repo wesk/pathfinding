@@ -22,10 +22,10 @@ public:
     void modifyTest();
 
     //void dstarHeuristicSort(std::vector<loc> &list);
-    static bool manhattanHeuristic(const loc &i, const loc &j);
-    int manhattanDist(loc l);
-    bool returnTrue();
-    void personalSortingAlgorithm(std::vector<loc> &l);
+    //static bool manhattanHeuristic(const loc &i, const loc &j);
+    //int manhattanDist(loc l);
+    //bool returnTrue();
+    //void personalSortingAlgorithm(std::vector<loc> &l);
 
 private:
     void updateGraph();

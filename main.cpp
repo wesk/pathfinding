@@ -14,25 +14,21 @@ int main(){
     grid g(40,40);
     g.fill(0,0,40,40);
     g.clear(1,1,38,38);
+
+    //g.fill(20,20,2,5);
+    g.fill(21,27,10,1);
+
     g.setStart({3,3});
     g.setGoal({30,35});
-//    g.fill(4,0,1,35);
-//    g.fill(10,4,1,36);
-//    g.fill(15,0,1,35);
-//    g.fill(20,4,1,36);
-//    g.fill(25,0,1,35);
-//    g.fill(15,16,4,2);
-//    g.fill(17,12,4,2);
-//    g.fill(20,15,4,2);
-    g.print();
+    g.printEverything();
 
-    pathfinder p(g);
-    if(!p.findPath()){
-        p.getSolved().printEverything();
-        std::cout<<"No Path Found                  No Path Found                           No Path Found                                No Path Found\n";
-    }
-    else{
-        p.getSolved().printEverything();
-    }
+//    pathfinder p(g);
+//    if(!p.findPath()){
+//        p.getSolved().printEverything();
+//        std::cout<<"No Path Found                  No Path Found                           No Path Found                                No Path Found\n";
+//    }
+//    else{
+//        p.getSolved().printEverything();
+//    }
     return 1;
 }

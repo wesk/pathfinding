@@ -89,16 +89,16 @@ void grid::print(){
 
 void grid::printEverything(){
 
-    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-    for(int i = 0; i < g.rows(); i++){
-        for(int j = 0; j < g.cols(); j++){
-            double present = g(i,j).distance;
-            std::cout<<std::setw(5)<< present<<" ";
+//    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+//    for(int i = 0; i < g.rows(); i++){
+//        for(int j = 0; j < g.cols(); j++){
+//            double present = g(i,j).distance;
+//            std::cout<<std::setw(5)<< present<<" ";
 
-        }
-        std::cout<<("\n");
-        std::cout<<"\n";
-    }
+//        }
+//        std::cout<<("\n");
+//        std::cout<<"\n";
+//    }
     std::cout<<"~~~~~~~~~~~~~~~~~visited~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
@@ -107,13 +107,20 @@ void grid::printEverything(){
         }
         std::cout<<"\n";
     }
-    std::cout<<"~~~~~~~~~~~~~~~~~address of previous~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+//    std::cout<<"~~~~~~~~~~~~~~~~~address of previous~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+//    for(int i = 0; i < g.rows(); i++){
+//        for(int j = 0; j < g.cols(); j++){
+//            node* present = g(i,j).pointerToPrevious;
+//            std::cout<<std::setw(8)<<present<<" ";
+//        }
+//        std::cout<<"\n";
+//        std::cout<<"\n";
+//    }
+    std::cout<<"~~~~~~~~~~~~~~~~~~~heuristic~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
-            node* present = g(i,j).pointerToPrevious;
-            std::cout<<std::setw(8)<<present<<" ";
+            std::cout<<std::setw(3)<<g(i,j).heuristic;
         }
-        std::cout<<"\n";
         std::cout<<"\n";
     }
     std::cout<<"~~~~~~~~~~~~~~~~~~~~~value:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
@@ -217,8 +224,6 @@ void grid::testConfig(){
     this->setGoal(gg);
 }
 
-// The remaining methods are simple getters and setters, for convenience. Not really needed.
-
 void grid::setStart(loc l){
     start = l;
     g(l.row,l.col).value = 3;
@@ -226,9 +231,25 @@ void grid::setStart(loc l){
 
 }
 
+int grid::calcManhattanHeuristic(loc l){
+
+    return abs(goal.row-l.row) + abs(goal.col-l.col);
+
+}
+
 void grid::setGoal(loc l){
     goal = l;
     g(l.row,l.col).value = 4;
+    //set heuristic for all nodes in grid
+    //int count  = 0;
+    for(int r = 0; r < g.rows(); r++){
+        for(int c = 0; c < g.cols(); c++){
+            //++count;
+            g(r,c).heuristic = calcManhattanHeuristic({r,c});
+            //std::cout<<calcManhattanHeuristic(l);
+        }
+    }
+    //std::cout<<count<<std::endl;
 }
 
 loc grid::getStart(){

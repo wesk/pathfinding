@@ -16,6 +16,7 @@ public:
     node* pointerToPrevious;
     //loc locOfPrevious; //Inelegant Solution, not using pointers anymore. Must improve.
     //void yo();
+    int heuristic;
 };
 
 #endif // NODE_H

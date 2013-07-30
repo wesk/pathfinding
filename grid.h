@@ -5,12 +5,6 @@
 
 // .block( , , , ) is not foolproof. It throws errors if it reaches out of range. If statements necessary
 
-
-//struct loc{ // in node.h file.
-//    int row;
-//    int col;
-//};
-
 class grid{
 protected:
     Eigen::Matrix<node,Eigen::Dynamic,Eigen::Dynamic> g;
@@ -42,6 +36,7 @@ public:
     bool getNodeVisited(loc l);
     void setNodePointerToPrev(loc current, loc additional_which_points_back);
     void setNodeLocToPrevious(loc current, loc pointsBack);
+    int calcManhattanHeuristic(loc l);
 
 };
 

@@ -13,13 +13,6 @@ pathfinder::pathfinder(grid &g) : gr(g) //Initialization Lists! Did not know thi
 
 }
 
-///////////////// Astar
-bool pathfinder::manhattanHeuristic(const loc& i, const loc& j){ //manhattan distance
-//    loc goal = gr.getGoal();
-    loc goal = {30,35};
-    return ((abs(goal.row - i.row) + abs(goal.col - i.col)) > (abs(goal.row - j.row) + abs(goal.col - j.col)));
-}
-
 bool pathfinder::findPath(){
 
     std::vector<loc> theMasterList;
@@ -31,14 +24,9 @@ bool pathfinder::findPath(){
     //int unsigned index = 0;
     while((gr.getNodeVisited(gr.getGoal()) == false && theMasterList.capacity() != 0)/* || theMasterList.capacity() != 0*/){
 
-        //this is the sort
-        //dstarHeuristicSort(theMasterList);
         theSecondaryList = gr.calcDistOfAllValidAdj(theMasterList[0]);
         theMasterList.erase(theMasterList.begin()); // erase first term
         theMasterList.insert(theMasterList.end(), theSecondaryList.begin(), theSecondaryList.end());
-
-        std::sort(theMasterList.begin(),theMasterList.end(),pathfinder::manhattanHeuristic);
-        //personalSortingAlgorithm(theMasterList);
 
     }
 
@@ -60,33 +48,25 @@ bool pathfinder::findPath(){
     }
 }
 
-bool pathfinder::returnTrue(){
-    return false;
-}
 
-int pathfinder::manhattanDist(loc l){
-    loc goal = gr.getGoal();
-    return (abs(goal.row - l.row) + abs(goal.col - l.col));
-}
 
-void pathfinder::personalSortingAlgorithm(std::vector<loc> &l){
-    //selection sort
-    int current;
-    int smallest;
-    for(unsigned int i = 0; i < l.capacity(); i++){
-        current = i;
-        for(unsigned int j = i+1; j < l.capacity(); ++j){
-            if((manhattanDist(l[j]) < manhattanDist(l[current]))){
-                smallest = j;
-            }
-        }
-        int temp = current;
-        l[current] = l[smallest];
-        l[smallest] = l[temp];
-    }
-}
+//void pathfinder::personalSortingAlgorithm(std::vector<loc> &l){
+//    //selection sort
+//    int current;
+//    int smallest;
+//    for(unsigned int i = 0; i < l.capacity(); i++){
+//        current = i;
+//        for(unsigned int j = i+1; j < l.capacity(); ++j){
+//            if((manhattanDist(l[j]) < manhattanDist(l[current]))){
+//                smallest = j;
+//            }
+//        }
+//        int temp = current;
+//        l[current] = l[smallest];
+//        l[smallest] = l[temp];
+//    }
+//}
 
-/////////////end astar
 
 void pathfinder::updateGraph(){ // This steps backwards to the start, folowing the winning path.
 
