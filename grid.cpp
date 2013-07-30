@@ -14,7 +14,7 @@ grid::grid(int numRows, int numCols){
     g.resize(numRows,numCols);
 }
 
-void grid::fillSingle(int r, int c){
+void grid::fillSingle(const int& r, const int& c){
     g(r,c).value = 1;
     g(r,c).visited = true;
 }
@@ -67,7 +67,7 @@ void grid::clear(int rowstart, int colstart, int rowlen, int collen){
 
 }
 
-void grid::outOfBound(loc amIOutOfRange){
+void grid::outOfBound(const loc& amIOutOfRange){
 
     if(amIOutOfRange.row < 0 || amIOutOfRange.col < 0 || amIOutOfRange.row >= g.rows() || amIOutOfRange.col >= g.cols()){
         std::cout<<"THE PROGRAM WILL CRASH, outOfBound detects an out-of-grid-range loc!\n";
@@ -122,13 +122,13 @@ void grid::printEverything(){
 //        std::cout<<"\n";
 //        std::cout<<"\n";
 //    }
-    std::cout<<"~~~~~~~~~~~~~~~~~~~heuristic~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-    for(int i = 0; i < g.rows(); i++){
-        for(int j = 0; j < g.cols(); j++){
-            std::cout<<std::setw(3)<<g(i,j).heuristic;
-        }
-        std::cout<<"\n";
-    }
+//    std::cout<<"~~~~~~~~~~~~~~~~~~~heuristic~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+//    for(int i = 0; i < g.rows(); i++){
+//        for(int j = 0; j < g.cols(); j++){
+//            std::cout<<std::setw(3)<<g(i,j).heuristic;
+//        }
+//        std::cout<<"\n";
+//    }
     std::cout<<"~~~~~~~~~~~~~~~~~~~~~value:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     this->print();
 }

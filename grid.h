@@ -15,7 +15,7 @@ public:
     grid(int numRows, int numCols);
     void fill(int rowstart, int colstart, int rowlen, int collen);
     void clear(int rowstart, int colstart, int rowlen, int collen);
-    void fillSingle(int r, int c);
+    void fillSingle(const int& r, const int& c);
     void setStart(loc l);
     void setGoal(loc l);
     loc getStart();
@@ -23,7 +23,7 @@ public:
     void testConfig();
     void print();
     void printEverything();
-    void outOfBound(loc amIOutOfRange); // returns to ensure input is legal.
+    void outOfBound(const loc& amIOutOfRange); // ensures input is legal.
     node* getAddressOfNode(loc l);
     bool areAdjacent(loc a, loc b);
     double calcDist(loc a, loc b);

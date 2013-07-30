@@ -16,7 +16,7 @@ private:
     grid gr;
     //int a = 120;
 public:
-    pathfinder(grid &gr);
+    pathfinder(grid& gr);
     bool findPath();
     grid getSolved();
     void modifyTest();

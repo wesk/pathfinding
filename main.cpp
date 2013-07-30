@@ -44,8 +44,8 @@ int main( int argc, char** argv )
         }
     }
 
-    //choose semi-arbitrary start point. Not the best system, can improve
-    myGrid.setStart({1,1});
+    //start is top left, end is bottom right.
+    myGrid.setStart({0,0});
     myGrid.setGoal({(int)img1.h-1,(int)img1.w-1});
 
     //draw 5x5 squares on the start and end
@@ -64,13 +64,13 @@ int main( int argc, char** argv )
     pathfinder solver(myGrid);
     solver.findPath();
     std::cout<<"solved\n";
-    myGrid.print();
+    solver.getSolved().printEverything();
 
     //draw the solution on the picture
     for(unsigned int row = 0; row<img1.h; row++){
         for(unsigned int col = 0; col<img1.w; col++){
             if(solver.getSolved().getNodeValue({row,col}) == 2){
-                img1.ptr[img1.pitch*col + row] = 0;
+                img1.ptr[img1.pitch*col + row] = 85;
             }
         }
     }
