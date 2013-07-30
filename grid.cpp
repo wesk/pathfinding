@@ -9,6 +9,7 @@
 #include <eigen3/Eigen/Eigen>
 #include <iomanip>
 
+
 grid::grid(int numRows, int numCols){
     g.resize(numRows,numCols);
 }
@@ -94,16 +95,16 @@ void grid::print(){
 
 void grid::printEverything(){
 
-    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-    for(int i = 0; i < g.rows(); i++){
-        for(int j = 0; j < g.cols(); j++){
-            double present = g(i,j).distance;
-            std::cout<<std::setw(5)<< present<<" ";
+//    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+//    for(int i = 0; i < g.rows(); i++){
+//        for(int j = 0; j < g.cols(); j++){
+//            double present = g(i,j).distance;
+//            std::cout<<std::setw(5)<< present<<" ";
 
-        }
-        std::cout<<("\n");
-        std::cout<<"\n";
-    }
+//        }
+//        std::cout<<("\n");
+//        std::cout<<"\n";
+//    }
     std::cout<<"~~~~~~~~~~~~~~~~~visited~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
@@ -112,22 +113,28 @@ void grid::printEverything(){
         }
         std::cout<<"\n";
     }
-    std::cout<<"~~~~~~~~~~~~~~~~~address of previous~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+//    std::cout<<"~~~~~~~~~~~~~~~~~address of previous~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+//    for(int i = 0; i < g.rows(); i++){
+//        for(int j = 0; j < g.cols(); j++){
+//            node* present = g(i,j).pointerToPrevious;
+//            std::cout<<std::setw(8)<<present<<" ";
+//        }
+//        std::cout<<"\n";
+//        std::cout<<"\n";
+//    }
+    std::cout<<"~~~~~~~~~~~~~~~~~~~heuristic~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
-            node* present = g(i,j).pointerToPrevious;
-            std::cout<<std::setw(8)<<present<<" ";
+            std::cout<<std::setw(3)<<g(i,j).heuristic;
         }
-        std::cout<<"\n";
         std::cout<<"\n";
     }
     std::cout<<"~~~~~~~~~~~~~~~~~~~~~value:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     this->print();
 }
 
-
-std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This returns a vector of locs, to pass to another function, instead of getAllActiveUnfinalized. This is the most important method.
-
+// This returns a vector of locs, to pass to another function, instead of getAllActiveUnfinalized. This is the most important method.
+std::vector<loc_heur> grid::calcDistOfAllValidAdj(loc l){
     outOfBound(l);
     //std::cout<<"in calcDistOfAllValidAjd method, current loc is: "<<l.row<<" "<<l.col<<std::endl;
     int rowstart,rowend,colstart,colend;
@@ -149,16 +156,25 @@ std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This returns a vector o
     }
     //int numberoflocs = 0;
 
-    std::vector<loc> listOfNewLocs;
+    std::vector<loc_heur> new_list;
 
     for(int r = rowstart; r <= rowend; r++){// <=, not just <
         for(int c = colstart; c <= colend; c++){
-            if(!(g(r,c).value == 1)){// anything but 1. 1 means full. //Clean up syntax here, use the setNode.. getNode... blablalba
-                if(g(r,c).distance == -1){ // if it hasn't been visited yet, this updates the new distance. Otherwise, see the else statement for distance check.
+            if(!(g(r,c).value == 1)){// anything but 1. 1 means full.
+
+                // if it hasn't been visited yet, this updates the new distance. Otherwise, see the else statement for distance check.
+                if(g(r,c).distance == -1){
                     this->setNodeDistance({r,c},this->getNodeDistance(l)+this->calcDist(l,{r,c}));
-                    //this->setNodeLocToPrevious(l,{r,c});
                     this->setNodePointerToPrev(l,{r,c}); //pointer method
-                    listOfNewLocs.push_back({r,c}); // adds the loc to the new list of where to still search
+
+                    // adds the loc to the new list of where to still search
+                    loc_heur current;
+                    current.location = {r,c};
+                    current.heuristic = getHeurist({r,c});
+                    //current.p_heuristic =
+                    new_list.push_back(current);
+
+                    //listOfNewLocs.push_back({r,c});
                 }
                 else{ // If it has been visited, check to see if this way is shorter. if so, update  like the previous two lines. else, do nothing.
                     if(this->getNodeDistance({r,c}) > this->getNodeDistance(l)+this->calcDist(l,{r,c})){
@@ -171,8 +187,10 @@ std::vector<loc> grid::calcDistOfAllValidAdj(loc l){  // This returns a vector o
         }
     }
     this->setNodeVisited(l,true);
-    return listOfNewLocs;
+    return new_list;
 }
+
+
 
 bool grid::areAdjacent(loc a, loc b){
 
@@ -222,8 +240,6 @@ double grid::calcDist(loc a, loc b){ // Precondition: Must be Adjacent! true is 
 //    this->setGoal(gg);
 //}
 
-// The remaining methods are simple getters and setters, for convenience. Not really needed.
-
 void grid::setStart(loc l){
     start = l;
     g(l.row,l.col).value = 3;
@@ -231,9 +247,22 @@ void grid::setStart(loc l){
 
 }
 
+int grid::calcManhattanHeuristic(loc l){
+
+    return abs(goal.row-l.row) + abs(goal.col-l.col);
+
+}
+
 void grid::setGoal(loc l){
     goal = l;
     g(l.row,l.col).value = 4;
+    //set heuristic for all nodes in grid
+
+    for(int r = 0; r < g.rows(); r++){
+        for(int c = 0; c < g.cols(); c++){
+            g(r,c).heuristic = calcManhattanHeuristic({r,c});
+        }
+    }
 }
 
 loc grid::getStart(){
@@ -246,6 +275,10 @@ loc grid::getGoal(){
 
 node* grid::getAddressOfNode(loc l){
     return &g(l.row,l.col);
+}
+
+int grid::getHeurist(loc l){
+    return g(l.row,l.col).heuristic;
 }
 
 void grid::setNodeValue(loc l,int v){

@@ -1,9 +1,17 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <stdio.h>
+#include <vector>
+
 struct loc{
     int row;
     int col;
+};
+
+struct loc_heur{
+    loc location;
+    int heuristic;
 };
 
 class node
@@ -16,6 +24,7 @@ public:
     node* pointerToPrevious;
     //loc locOfPrevious; //Inelegant Solution, not using pointers anymore. Must improve.
     //void yo();
+    int heuristic;
 };
 
 #endif // NODE_H

@@ -5,28 +5,48 @@
 #include <vector>
 #include <math.h>
 #include "grid.h"
+#include <algorithm>
 #include "node.h"
 #include "pathfinder.h"
+
+
 
 pathfinder::pathfinder(grid &g) : gr(g) //Initialization Lists! Did not know this was needed.
 {
 
 }
 
+//bool pathfinder::findClosest(loc_heur i, loc_heur j){
+//    return( (i.heuristic) > (j.heuristic));
+//}
+
+int pathfinder::findMin(std::vector<loc_heur> it){
+    int min = 0;
+    for(unsigned int i = 1; i < it.capacity(); i++){
+        if(it[i].heuristic < it[min].heuristic){
+            min = i;
+        }
+    }
+    return min;
+}
+
 bool pathfinder::findPath(){
 
-    std::vector<loc> theMasterList;
-    std::vector<loc> theSecondaryList;
-    //theMasterList= gr.getAllActiveUnfinalized();
+    std::vector<loc_heur> Master;
+    std::vector<loc_heur> Secondary;
     std::cout<<"inside findpath method\n";
-    theMasterList = gr.calcDistOfAllValidAdj(gr.getStart());
+    Master = gr.calcDistOfAllValidAdj(gr.getStart());
 
-    int unsigned index = 0;
-    while((gr.getNodeVisited(gr.getGoal()) == false && index < theMasterList.capacity())/* || theMasterList.capacity() != 0*/){
+    //int unsigned index = 0;
+    int current = 0;
+    while((gr.getNodeVisited(gr.getGoal()) == false &&
+           Master.capacity() != 0))              {
 
-        theSecondaryList = gr.calcDistOfAllValidAdj(theMasterList[index]);
-        theMasterList.insert(theMasterList.end(), theSecondaryList.begin(), theSecondaryList.end());
-        index ++;
+        current = findMin(Master); //heuristic findmin
+        Secondary = gr.calcDistOfAllValidAdj(Master[current].location);
+        Master.erase(Master.begin()+current); // erase first term
+        Master.insert(Master.end(), Secondary.begin(), Secondary.end());
+        //std::min ()
     }
 
     std::cout<<"Main findPath loop exiting\n";
@@ -42,10 +62,30 @@ bool pathfinder::findPath(){
         return true;
     }
     else{
-        std::cout<<"Graph Not Solved\n";
+        std::cout<<"Grid Not Solved\n";
         return false;
     }
 }
+
+
+
+//void pathfinder::personalSortingAlgorithm(std::vector<loc> &l){
+//    //selection sort
+//    int current;
+//    int smallest;
+//    for(unsigned int i = 0; i < l.capacity(); i++){
+//        current = i;
+//        for(unsigned int j = i+1; j < l.capacity(); ++j){
+//            if((manhattanDist(l[j]) < manhattanDist(l[current]))){
+//                smallest = j;
+//            }
+//        }
+//        int temp = current;
+//        l[current] = l[smallest];
+//        l[smallest] = l[temp];
+//    }
+//}
+
 
 void pathfinder::updateGraph(){ // This steps backwards to the start, folowing the winning path.
 

@@ -5,12 +5,6 @@
 
 // .block( , , , ) is not foolproof. It throws errors if it reaches out of range. If statements necessary
 
-
-//struct loc{ // in node.h file.
-//    int row;
-//    int col;
-//};
-
 class grid{
 protected:
     Eigen::Matrix<node,Eigen::Dynamic,Eigen::Dynamic> g;
@@ -33,8 +27,8 @@ public:
     node* getAddressOfNode(loc l);
     bool areAdjacent(loc a, loc b);
     double calcDist(loc a, loc b);
-    std::vector<loc> calcDistOfAllValidAdj(loc l);
-    std::vector<loc> getAllActiveUnfinalized();
+    std::vector<loc_heur> calcDistOfAllValidAdj(loc l);
+    //std::vector<loc> getAllActiveUnfinalized();
     void setNodeValue(loc l, int v);
     void setNodeDistance(loc l, double d);
     void setNodeVisited(loc l, bool b);
@@ -43,6 +37,9 @@ public:
     bool getNodeVisited(loc l);
     void setNodePointerToPrev(loc current, loc additional_which_points_back);
     void setNodeLocToPrevious(loc current, loc pointsBack);
+    int calcManhattanHeuristic(loc l);
+
+    int getHeurist(loc l);
 
 };
 
