@@ -45,17 +45,17 @@ int main( int argc, char** argv )
     }
 
     //choose semi-arbitrary start point. Not the best system, can improve
-    myGrid.setStart({50,50});
-    myGrid.setGoal({(int)img1.h-50,(int)img1.w-50});
+    myGrid.setStart({1,1});
+    myGrid.setGoal({(int)img1.h-1,(int)img1.w-1});
 
     //draw 5x5 squares on the start and end
-    for(unsigned int y = 45; y< 55; y++){
-        for(unsigned int x = 45; x<55; x++){
+    for(unsigned int y = 1; y< 5; y++){
+        for(unsigned int x = 1; x<5; x++){
             img1.ptr[img1.pitch*y + x] = 0;
         }
     }
-    for(unsigned int y = img1.h-55; y<img1.h-45; y++){
-        for(unsigned int x = img1.w-55; x<img1.w-45; x++){
+    for(unsigned int y = img1.h-5; y<img1.h-1; y++){
+        for(unsigned int x = img1.w-5; x<img1.w-1; x++){
             img1.ptr[img1.pitch*y + x] = 0;
         }
     }
