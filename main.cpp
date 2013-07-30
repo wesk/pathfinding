@@ -48,6 +48,7 @@ int main( int argc, char** argv )
     myGrid.setStart({50,50});
     myGrid.setGoal({(int)img1.h-50,(int)img1.w-50});
 
+    //draw 5x5 squares on the start and end
     for(unsigned int y = 45; y< 55; y++){
         for(unsigned int x = 45; x<55; x++){
             img1.ptr[img1.pitch*y + x] = 0;
@@ -58,12 +59,14 @@ int main( int argc, char** argv )
             img1.ptr[img1.pitch*y + x] = 0;
         }
     }
-    std::cout<<"preparing to solve with dijkstra\n";
+
+    std::cout<<"preparing to solve\n";
     pathfinder solver(myGrid);
     solver.findPath();
     std::cout<<"solved\n";
     myGrid.print();
 
+    //draw the solution on the picture
     for(unsigned int row = 0; row<img1.h; row++){
         for(unsigned int col = 0; col<img1.w; col++){
             if(solver.getSolved().getNodeValue({row,col}) == 2){
