@@ -108,7 +108,7 @@ void grid::printEverything(){
     std::cout<<"~~~~~~~~~~~~~~~~~visited~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
-            bool present = g(i,j).visited;
+            bool present = g(j,i).visited; //HACK! BAD! Shouldn't be Necessary!
             std::cout<<present<<" ";
         }
         std::cout<<"\n";

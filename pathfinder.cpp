@@ -43,8 +43,8 @@ bool pathfinder::findPath(){
 
     //int unsigned index = 0;
     int current = 0;
-    while((gr.getNodeVisited(gr.getGoal()) == false)) /*&&
-           Master.capacity() != 0)*/              {
+    while((gr.getNodeVisited(gr.getGoal()) == false) &&
+           Master.capacity() != 0)              {
 
         current = findMin(Master); //heuristic findmin
         Secondary = gr.calcDistOfAllValidAdj(Master[current].location);
