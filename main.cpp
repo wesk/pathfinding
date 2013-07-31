@@ -20,9 +20,12 @@ int main(){
     myG.clear(1,1,28,28);
     myG.fill(15,15,3,3);
 
-    myG.fill(20,20,5,4);
-    myG.print();
+    myG.fill(5,20,5,4);
+
     myG.genBrushfire();
+    myG.genVoronoi();
+    myG.print();
+
 //    std::vector<loc> it = myG.getAdjacentToLoc({5,29});
 //    std::vector<loc>::iterator iterator;
 //    for(iterator = it.begin(); iterator < it.end(); iterator++){

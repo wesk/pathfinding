@@ -32,7 +32,8 @@ public:
     void outOfBound(const loc& amIOutOfRange); // ensures input is legal.
     node* getAddressOfNode(loc l);
     bool areAdjacent(loc a, loc b);
-    std::vector<loc> getAdjacentToLoc(loc l);
+    std::vector<loc> getAdjacentToLoc(loc l); //this, and method below are quasi-identical
+    std::vector<loc> getManhattanAdjacentToLoc(loc l);
     double calcDist(loc a, loc b);
     std::vector<loc_heur> calcDistOfAllValidAdj(loc l);
     //std::vector<loc> getAllActiveUnfinalized();
@@ -51,6 +52,7 @@ public:
     ///////////////
 
     void genBrushfire();
+    void genVoronoi();
 
 };
 
