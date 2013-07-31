@@ -14,6 +14,11 @@ struct loc_heur{
     int heuristic;
 };
 
+//struct tempLoc_dist{
+//    loc l;
+//    int dist;
+//};
+
 class node
 {
 public:

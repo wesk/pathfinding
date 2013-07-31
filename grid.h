@@ -5,6 +5,11 @@
 
 // .block( , , , ) is not foolproof. It throws errors if it reaches out of range. If statements necessary
 
+struct tempLoc_dist{
+    loc l;
+    int dist;
+};
+
 class grid{
 protected:
     Eigen::Matrix<node,Eigen::Dynamic,Eigen::Dynamic> g;
@@ -26,6 +31,7 @@ public:
     void outOfBound(const loc& amIOutOfRange); // ensures input is legal.
     node* getAddressOfNode(loc l);
     bool areAdjacent(loc a, loc b);
+    std::vector<loc> getAdjacentToLoc(loc l);
     double calcDist(loc a, loc b);
     std::vector<loc_heur> calcDistOfAllValidAdj(loc l);
     //std::vector<loc> getAllActiveUnfinalized();
@@ -40,6 +46,10 @@ public:
     int calcManhattanHeuristic(loc l);
 
     int getHeurist(loc l);
+
+    ///////////////
+
+    void genBrushfire();
 
 };
 

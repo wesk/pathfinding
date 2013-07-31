@@ -82,9 +82,9 @@ void grid::print(){
             if(present == 0){
                 std::cout<<"  ";
             }
-            else if(present == 2){
-                std::cout<<(char)0x40<<" ";
-            }
+//            else if(present == 2){
+//                std::cout<<(char)0x40<<" ";
+//            }
             else{
                 std::cout<<present<<" ";
             }
@@ -136,7 +136,6 @@ void grid::printEverything(){
 // This returns a vector of locs, to pass to another function, instead of getAllActiveUnfinalized. This is the most important method.
 std::vector<loc_heur> grid::calcDistOfAllValidAdj(loc l){
     outOfBound(l);
-    //std::cout<<"in calcDistOfAllValidAjd method, current loc is: "<<l.row<<" "<<l.col<<std::endl;
     int rowstart,rowend,colstart,colend;
     rowstart = l.row;
     rowend = l.row;
@@ -264,7 +263,91 @@ void grid::setGoal(loc l){
         }
     }
 }
+///////////////////// Brushfire/Voronoi Stuff
+///
+/*
 
+brushfire copies the existing value, occupied (1) or empty (0) into node.distance
+node.distance stores the distance of that node to the nearest obstruction
+
+value then is filled with the wavefront collision. '5' shall be used, just because.
+
+
+*/
+std::vector<loc> grid::getAdjacentToLoc(loc l){
+    outOfBound(l);
+    std::vector<loc> adjLocs;
+    int rowStart = l.row;
+    int colStart = l.col;
+    int rowEnd = l.row;
+    int colEnd = l.col;
+    if(!(l.row-1 < 0)){
+        rowStart -= 1;
+    }
+    if(!(l.col-1 < 0)){
+        colStart -= 1;
+    }
+    if(!(l.row+1 > g.rows()-1)){
+        rowEnd += 1;
+    }
+    if(!(l.col+1 > g.cols()-1)){
+        colEnd += 1;
+    }
+    for(int k = rowStart; k <= rowEnd; k++){
+        for(int p = colStart; p <= colEnd; p++){
+            if (!(l.row == k && l.col == p)){
+                loc current;
+                current.row = k;
+                current.col = p;
+                if(!(current.col == 0 && current.row == 0)){
+                    adjLocs.push_back(current);
+                }
+
+            }
+        }
+    }
+    return adjLocs;
+}
+
+void grid::genBrushfire(){
+    int totalNum = g.rows() * g.cols();
+    int currentNum = 0;
+    for(int r = 0; r < g.rows(); r++){
+        for(int c = 0; c< g.cols(); c++){
+            if(getNodeValue({r,c}) == 1){
+                currentNum++;
+            }
+        }
+    }
+    std::vector<loc> list;
+    std::vector<loc>::iterator list_iterator;
+    std::vector<tempLoc_dist> tempList;
+    std::vector<tempLoc_dist>::iterator tempList_iterator;
+    tempLoc_dist t; // composes the tempList;
+    //while(currentNum < totalNum){ //while the grid isn't entirely full
+        for(int r = 0; r < g.rows(); r++){
+            for(int c = 0; c< g.cols(); c++){ //iterate through entire grid
+                if(getNodeValue({r,c}) == 0){ // if r/c not occupied
+                    list = getAdjacentToLoc({r,c}); // look for adj occupied nodes
+                    for(list_iterator = list.begin(); list_iterator != list.end(); list_iterator++){
+                        if(!(getNodeValue(*list_iterator) == 0)){ //when one's found
+                            t.l = {r,c};
+                            t.dist = getNodeValue(*list_iterator)+1; //1+ than prev
+                            tempList.push_back(t);
+                        }
+                    }
+                }
+            }
+        }
+        //now, update grid with new data.
+        for(tempList_iterator = tempList.begin(); tempList_iterator != tempList.end(); tempList_iterator++){
+            setNodeValue(tempList_iterator->l, tempList_iterator->dist);
+            //here is where we need to look for duplicates
+        }
+        printEverything();
+    //}
+}
+////////////////END Brushfire
 loc grid::getStart(){
     return start;
 }
