@@ -61,6 +61,7 @@ int main( int argc, char** argv )
     }
 
     std::cout<<"preparing to solve\n";
+    myGrid.printEverything();
     pathfinder solver(myGrid);
     solver.findPath();
     std::cout<<"solved\n";
