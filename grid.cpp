@@ -428,16 +428,18 @@ void grid::genVoronoi(){
     bool candidate;
     for(int r = 0; r < g.rows(); r++){
         for(int c = 0; c < g.cols(); c++){
-            candidate = true;
-            adj = getAdjacentToLoc({r,c});
-            currDist = getNodeDistance({r,c});
-            for(loc_iterator = adj.begin(); loc_iterator != adj.end(); loc_iterator++){
-                if(currDist < getNodeDistance(*loc_iterator)){
-                    candidate = false;
+            if(getNodeValue({r,c}) != 1){ //not occupied
+                candidate = true;
+                adj = getManhattanAdjacentToLoc({r,c});
+                currDist = getNodeDistance({r,c});
+                for(loc_iterator = adj.begin(); loc_iterator != adj.end(); loc_iterator++){
+                    if(currDist < getNodeDistance(*loc_iterator)){
+                        candidate = false;
+                    }
                 }
-            }
-            if(candidate){
-                setNodeValue({r,c},5);
+                if(candidate){
+                    setNodeValue({r,c},5);
+                }
             }
         }
     }
