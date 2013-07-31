@@ -432,6 +432,8 @@ void grid::genVoronoi(){
                 candidate = true;
                 adj = getManhattanAdjacentToLoc({r,c});
                 currDist = getNodeDistance({r,c});
+                //if there are any orthogonally adjacent nodes with a higher distance,
+                //the current node is not on the voronoi wave collision
                 for(loc_iterator = adj.begin(); loc_iterator != adj.end(); loc_iterator++){
                     if(currDist < getNodeDistance(*loc_iterator)){
                         candidate = false;
