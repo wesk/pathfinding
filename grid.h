@@ -27,6 +27,7 @@ public:
     loc getGoal();
     void testConfig();
     void print();
+    void printNiceSpacing();
     void printEverything();
     void outOfBound(const loc& amIOutOfRange); // ensures input is legal.
     node* getAddressOfNode(loc l);

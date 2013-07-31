@@ -93,6 +93,26 @@ void grid::print(){
     }
 }
 
+void grid::printNiceSpacing(){
+    for(int i = 0; i < g.rows(); i++){
+        for(int j = 0; j < g.cols(); j++){
+            int present = g(i,j).value;
+            if(present == 0){
+                std::cout<<"  ";
+            }
+//            else if(present == 2){
+//                std::cout<<(char)0x40<<" ";
+//            }
+            else{
+                std::cout<<std::setw(2)<<present<<" ";
+            }
+        }
+        std::cout<<"\n";
+    }
+    std::cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    std::cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+}
+
 void grid::printEverything(){
 
 //    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
@@ -324,7 +344,8 @@ void grid::genBrushfire(){
     std::vector<tempLoc_dist> tempList;
     std::vector<tempLoc_dist>::iterator tempList_iterator;
     tempLoc_dist t; // composes the tempList;
-    //while(currentNum < totalNum){ //while the grid isn't entirely full
+    bool done = false;
+    while(!done){ //while the grid isn't entirely full
         for(int r = 0; r < g.rows(); r++){
             for(int c = 0; c< g.cols(); c++){ //iterate through entire grid
                 if(getNodeValue({r,c}) == 0){ // if r/c not occupied
@@ -344,8 +365,19 @@ void grid::genBrushfire(){
             setNodeValue(tempList_iterator->l, tempList_iterator->dist);
             //here is where we need to look for duplicates
         }
-        printEverything();
-    //}
+        printNiceSpacing();
+        bool zero = false;
+        for(int i = 0; i < g.rows(); i++){
+            for(int j = 0; j < g.cols(); j++){
+                if(g(i,j).value == 0){
+                    zero = true;
+                }
+            }
+        }
+        if(!zero){
+            done = true;
+        }
+    }
 }
 ////////////////END Brushfire
 loc grid::getStart(){

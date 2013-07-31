@@ -19,6 +19,8 @@ int main(){
     myG.fill(0,0,30,30);
     myG.clear(1,1,28,28);
     myG.fill(15,15,3,3);
+
+    myG.fill(20,20,5,4);
     myG.print();
     myG.genBrushfire();
 //    std::vector<loc> it = myG.getAdjacentToLoc({5,29});
