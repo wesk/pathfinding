@@ -115,24 +115,24 @@ void grid::printNiceSpacing(){
 
 void grid::printEverything(){
 
-    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-    for(int i = 0; i < g.rows(); i++){
-        for(int j = 0; j < g.cols(); j++){
-            double present = g(i,j).distance;
-            std::cout<<std::setw(2)<< present;
-
-        }
-        std::cout<<("\n");
-
-    }
-//    std::cout<<"~~~~~~~~~~~~~~~~~visited~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+//    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 //    for(int i = 0; i < g.rows(); i++){
 //        for(int j = 0; j < g.cols(); j++){
-//            bool present = g(i,j).visited;
-//            std::cout<<present<<" ";
+//            double present = g(i,j).distance;
+//            std::cout<<std::setw(2)<< present;
+
 //        }
-//        std::cout<<"\n";
+//        std::cout<<("\n");
+
 //    }
+    std::cout<<"~~~~~~~~~~~~~~~~~visited~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    for(int i = 0; i < g.rows(); i++){
+        for(int j = 0; j < g.cols(); j++){
+            bool present = g(i,j).visited;
+            std::cout<<present<<" ";
+        }
+        std::cout<<"\n";
+    }
 
 //    std::cout<<"~~~~~~~~~~~~~~~~~address of previous~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 //    for(int i = 0; i < g.rows(); i++){
@@ -383,7 +383,7 @@ void grid::genBrushfire(){ // modifying node.distance, not node.value
         for(int r = 0; r < g.rows(); r++){
             for(int c = 0; c< g.cols(); c++){ //iterate through entire grid
                 if(getNodeDistance({r,c}) == 0){ // if r/c not occupied
-                    list = getAdjacentToLoc({r,c}); // look for adj occupied nodes
+                    //list = getAdjacentToLoc({r,c}); // look for adj occupied nodes
                     list = getManhattanAdjacentToLoc({r,c});
                     for(list_iterator = list.begin(); list_iterator != list.end(); list_iterator++){
                         if(!(getNodeDistance(*list_iterator) == 0)){ //when one is found
@@ -436,6 +436,7 @@ void grid::genVoronoi(){
                 //the current node is not on the voronoi wave collision
                 for(loc_iterator = adj.begin(); loc_iterator != adj.end(); loc_iterator++){
                     if(currDist < getNodeDistance(*loc_iterator)){
+
                         candidate = false;
                     }
                 }

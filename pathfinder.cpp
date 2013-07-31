@@ -23,9 +23,7 @@ pathfinder::pathfinder(grid &g) : gr(g) //Initialization Lists! Did not know thi
 int pathfinder::findMin(std::vector<loc_heur> it){
     int min = 0;
     for(unsigned int i = 1; i < it.capacity(); i++){
-//        if(it[i].heuristic < it[min].heuristic){
-//            min = i;
-//        }
+
         if(it[i].heuristic + gr.getNodeDistance(it[i].location) <
                 (it[min].heuristic + gr.getNodeDistance(it[min].location))){
             min = i;

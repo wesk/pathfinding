@@ -29,6 +29,8 @@ int main( int argc, char** argv )
     std::cout<<img1.h<<" "<<img1.w<<std::endl;
 
     // copying the image data into grid class.
+
+    //may be reversed
     for(unsigned int y = 0; y<img1.h; y++){
         for(unsigned int x = 0; x<img1.w; x++){
             if(img1.ptr[img1.pitch*y + x] == 0){
@@ -43,33 +45,52 @@ int main( int argc, char** argv )
     myGrid.setStart({0,0});
     myGrid.setGoal({(int)img1.h-1,(int)img1.w-1});
 
-//    //draw 5x5 squares on the start and end
-//    for(unsigned int y = 1; y< 5; y++){
-//        for(unsigned int x = 1; x<5; x++){
-//            img1.ptr[img1.pitch*y + x] = 0;
-//        }
-//    }
-//    for(unsigned int y = img1.h-5; y<img1.h-1; y++){
-//        for(unsigned int x = img1.w-5; x<img1.w-1; x++){
-//            img1.ptr[img1.pitch*y + x] = 0;
-//        }
-//    }
+    //draw 5x5 squares on the start and end
+    for(unsigned int y = 1; y< 5; y++){
+        for(unsigned int x = 1; x<5; x++){
+            img1.ptr[img1.pitch*y + x] = 0;
+        }
+    }
+    for(unsigned int y = img1.h-5; y<img1.h-1; y++){
+        for(unsigned int x = img1.w-5; x<img1.w-1; x++){
+            img1.ptr[img1.pitch*y + x] = 0;
+        }
+    }
 
     std::cout<<"preparing to solve\n";
     myGrid.print();
-    myGrid.genBrushfire();
-    myGrid.genVoronoi();
-    myGrid.printEverything();
-    //pathfinder solver(myGrid);
-    //solver.findPath();
-    //std::cout<<"solved\n";
-    //solver.getSolved().printEverything();
+
+    pathfinder finder(myGrid);
+    finder.findPath();
+    finder.getSolved().printEverything();
 
     //draw the voronoi diag on the picture
+//    for(unsigned int row = 0; row<img1.h; row++){
+//        for(unsigned int col = 0; col<img1.w; col++){
+//            if(myGrid.getNodeValue({row,col}) == 5){
+//                img1.ptr[img1.pitch*col + row] = 100;
+//            }
+//        }
+//    }
+
+    for(unsigned int row = 0; row<img1.h; row++){
+        for(unsigned int col = 0; col<img1.w; col++){
+            if(finder.getSolved().getNodeValue({row,col}) == 2){
+                img1.ptr[img1.pitch*col + row] = 50;
+            }
+        }
+    }
+
+    //mapped path, now belatedly draw the voronoi
+    myGrid.genBrushfire();
+    myGrid.genVoronoi();
+
     for(unsigned int row = 0; row<img1.h; row++){
         for(unsigned int col = 0; col<img1.w; col++){
             if(myGrid.getNodeValue({row,col}) == 5){
-                img1.ptr[img1.pitch*col + row] = 85;
+                if(! img1.ptr[img1.pitch*col + row] < 5){
+                    img1.ptr[img1.pitch*col + row] = 100;
+                }
             }
         }
     }
