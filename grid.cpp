@@ -151,7 +151,7 @@ void grid::printEverything(){
 //        std::cout<<"\n";
 //    }
     std::cout<<"~~~~~~~~~~~~~~~~~~~~~value:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-    this->print();
+    //this->print();
 }
 
 // This returns a vector of locs, to pass to another function, instead of getAllActiveUnfinalized. This is the most important method.
