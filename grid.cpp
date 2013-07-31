@@ -115,16 +115,16 @@ void grid::printNiceSpacing(){
 
 void grid::printEverything(){
 
-//    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-//    for(int i = 0; i < g.rows(); i++){
-//        for(int j = 0; j < g.cols(); j++){
-//            double present = g(i,j).distance;
-//            std::cout<<std::setw(5)<< present<<" ";
+    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    for(int i = 0; i < g.rows(); i++){
+        for(int j = 0; j < g.cols(); j++){
+            double present = g(i,j).distance;
+            std::cout<<std::setw(2)<< present;
 
-//        }
-//        std::cout<<("\n");
-//        std::cout<<"\n";
-//    }
+        }
+        std::cout<<("\n");
+
+    }
     std::cout<<"~~~~~~~~~~~~~~~~~visited~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
@@ -329,16 +329,15 @@ std::vector<loc> grid::getAdjacentToLoc(loc l){
     return adjLocs;
 }
 
-void grid::genBrushfire(){
-    int totalNum = g.rows() * g.cols();
-    int currentNum = 0;
-    for(int r = 0; r < g.rows(); r++){
-        for(int c = 0; c< g.cols(); c++){
-            if(getNodeValue({r,c}) == 1){
-                currentNum++;
-            }
+void grid::genBrushfire(){ // in node.distance, not node.value
+
+    //set node.distance to be the same as node.value in all cases
+    for(int i = 0; i < g.rows(); i++){
+        for(int j = 0; j < g.cols(); j++){
+            g(i,j).distance = g(i,j).value;
         }
     }
+
     std::vector<loc> list;
     std::vector<loc>::iterator list_iterator;
     std::vector<tempLoc_dist> tempList;
@@ -348,12 +347,12 @@ void grid::genBrushfire(){
     while(!done){ //while the grid isn't entirely full
         for(int r = 0; r < g.rows(); r++){
             for(int c = 0; c< g.cols(); c++){ //iterate through entire grid
-                if(getNodeValue({r,c}) == 0){ // if r/c not occupied
+                if(getNodeDistance({r,c}) == 0){ // if r/c not occupied
                     list = getAdjacentToLoc({r,c}); // look for adj occupied nodes
                     for(list_iterator = list.begin(); list_iterator != list.end(); list_iterator++){
-                        if(!(getNodeValue(*list_iterator) == 0)){ //when one's found
+                        if(!(getNodeDistance(*list_iterator) == 0)){ //when one's found
                             t.l = {r,c};
-                            t.dist = getNodeValue(*list_iterator)+1; //1+ than prev
+                            t.dist = getNodeDistance(*list_iterator)+1; //1+ than prev
                             tempList.push_back(t);
                         }
                     }
@@ -362,14 +361,14 @@ void grid::genBrushfire(){
         }
         //now, update grid with new data.
         for(tempList_iterator = tempList.begin(); tempList_iterator != tempList.end(); tempList_iterator++){
-            setNodeValue(tempList_iterator->l, tempList_iterator->dist);
+            setNodeDistance(tempList_iterator->l, tempList_iterator->dist);
             //here is where we need to look for duplicates
         }
-        printNiceSpacing();
+        //checks for end case
         bool zero = false;
         for(int i = 0; i < g.rows(); i++){
             for(int j = 0; j < g.cols(); j++){
-                if(g(i,j).value == 0){
+                if(g(i,j).distance == 0){
                     zero = true;
                 }
             }
@@ -378,6 +377,7 @@ void grid::genBrushfire(){
             done = true;
         }
     }
+    printEverything();
 }
 ////////////////END Brushfire
 loc grid::getStart(){
