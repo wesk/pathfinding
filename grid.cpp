@@ -276,6 +276,7 @@ int grid::calcManhattanHeuristic(loc l){
 void grid::setGoal(loc l){
     goal = l;
     g(l.row,l.col).value = 4;
+    g(l.row,l.col).visited = false;
     //set heuristic for all nodes in grid
 
     for(int r = 0; r < g.rows(); r++){
