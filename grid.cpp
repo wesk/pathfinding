@@ -96,9 +96,9 @@ void grid::print(){
 void grid::printNiceSpacing(){
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
-            int present = g(i,j).value;
+            int present = g(i,j).distance;
             if(present == 0){
-                std::cout<<"  ";
+                std::cout<<std::setw(2)<<""<<" ";
             }
 //            else if(present == 2){
 //                std::cout<<(char)0x40<<" ";
@@ -115,16 +115,16 @@ void grid::printNiceSpacing(){
 
 void grid::printEverything(){
 
-//    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-//    for(int i = 0; i < g.rows(); i++){
-//        for(int j = 0; j < g.cols(); j++){
-//            double present = g(i,j).distance;
-//            std::cout<<std::setw(2)<< present;
+    std::cout<<"~~~~~~~~~~~~~~~~~~~distance~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    for(int i = 0; i < g.rows(); i++){
+        for(int j = 0; j < g.cols(); j++){
+            double present = g(i,j).distance;
+            std::cout<<std::setw(2)<< present;
 
-//        }
-//        std::cout<<("\n");
+        }
+        std::cout<<("\n");
 
-//    }
+    }
     std::cout<<"~~~~~~~~~~~~~~~~~visited~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
     for(int i = 0; i < g.rows(); i++){
         for(int j = 0; j < g.cols(); j++){
@@ -151,7 +151,7 @@ void grid::printEverything(){
 //        std::cout<<"\n";
 //    }
     std::cout<<"~~~~~~~~~~~~~~~~~~~~~value:~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-    //this->print();
+ //   this->print();
 }
 
 // This returns a vector of locs, to pass to another function, instead of getAllActiveUnfinalized. This is the most important method.
@@ -380,31 +380,39 @@ void grid::genBrushfire(){ // modifying node.distance, not node.value
     std::vector<tempLoc_dist>::iterator tempList_iterator;
     tempLoc_dist t; // element stored within tempList;
     bool done = false;
+    bool collision;
     while(!done){ //while the grid isn't entirely full
         for(int r = 0; r < g.rows(); r++){
             for(int c = 0; c< g.cols(); c++){ //iterate through entire grid
                 if(getNodeDistance({r,c}) == 0){ // if r/c not occupied
                     //list = getAdjacentToLoc({r,c}); // look for adj occupied nodes
                     list = getManhattanAdjacentToLoc({r,c});
+                    collision = false; // if two different nodes try to mod a square, setval 5
                     for(list_iterator = list.begin(); list_iterator != list.end(); list_iterator++){
-                        if(!(getNodeDistance(*list_iterator) == 0)){ //when one is found
-                            t.l = {r,c};
-                            t.dist = getNodeDistance(*list_iterator)+1; //1+ than prev
-                            tempList.push_back(t);
+                        if(collision == false){
+                            if((getNodeDistance(*list_iterator) != 0)){ //when one is found
+                                collision = true;
+                                t.l = {r,c};
+                                t.dist = getNodeDistance(*list_iterator)+1; //1+ than prev
+                                tempList.push_back(t);
+                            }
+                        }
+                        else {
+                            //setNodeValue(*list_iterator,5);
+                            //collision junk bla
                         }
                     }
                 }
             }
         }
         //now, update grid with new data.
+        //bool state;
         for(tempList_iterator = tempList.begin(); tempList_iterator != tempList.end(); tempList_iterator++){
             if(getNodeDistance(tempList_iterator->l) == 0){
                 setNodeDistance(tempList_iterator->l, tempList_iterator->dist);
+
             }
-            else{
-                //setNodeValue(tempList_iterator->l,5);
-            }
-            //here is where we need to look for duplicates
+
         }
         //checks for end case
         bool zero = false;
@@ -418,6 +426,7 @@ void grid::genBrushfire(){ // modifying node.distance, not node.value
         if(!zero){
             done = true;
         }
+        //grid::printNiceSpacing();
     }
     printEverything();
 }
@@ -443,6 +452,19 @@ void grid::genVoronoi(){
                 }
                 if(candidate){
                     setNodeValue({r,c},5);
+                }
+            }
+        }
+    }
+}
+
+void grid::smoothVoronoi(){
+    for(int i = 0; i < g.rows(); i++){
+        for(int j = 0; j < g.cols(); j++){
+            if(g(i,j).value == 5){
+                std::vector<loc> list = getManhattanAdjacentToLoc({i,j});
+                for(std::vector<loc>::iterator l_it = list.begin(); l_it != list.end(); l_it++){
+                    setNodeValue(*l_it,5);
                 }
             }
         }

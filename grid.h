@@ -53,6 +53,7 @@ public:
 
     void genBrushfire();
     void genVoronoi();
+    void smoothVoronoi();
 
 };
 

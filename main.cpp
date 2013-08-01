@@ -13,6 +13,7 @@
 
 
 
+
 int main( int argc, char** argv )
 {
     if(argc <= 1) {
@@ -39,7 +40,7 @@ int main( int argc, char** argv )
         }
     }
 
-    //fill most edge values
+//    //fill most edge values
 
     //start is top left, end is bottom right.
     myGrid.setStart({0,0});
@@ -58,21 +59,13 @@ int main( int argc, char** argv )
     }
 
     std::cout<<"preparing to solve\n";
-    myGrid.print();
+    //myGrid.print();
 
     pathfinder finder(myGrid);
     finder.findPath();
     finder.getSolved().printEverything();
 
-    //draw the voronoi diag on the picture
-//    for(unsigned int row = 0; row<img1.h; row++){
-//        for(unsigned int col = 0; col<img1.w; col++){
-//            if(myGrid.getNodeValue({row,col}) == 5){
-//                img1.ptr[img1.pitch*col + row] = 100;
-//            }
-//        }
-//    }
-
+     //draw a* path
     for(unsigned int row = 0; row<img1.h; row++){
         for(unsigned int col = 0; col<img1.w; col++){
             if(finder.getSolved().getNodeValue({row,col}) == 2){
@@ -82,14 +75,20 @@ int main( int argc, char** argv )
     }
 
     //mapped path, now belatedly draw the voronoi
+
+
     myGrid.genBrushfire();
     myGrid.genVoronoi();
 
+
+    //myGrid.printEverything();
+
+    //draw voronoi
     for(unsigned int row = 0; row<img1.h; row++){
         for(unsigned int col = 0; col<img1.w; col++){
             if(myGrid.getNodeValue({row,col}) == 5){
                 if(! img1.ptr[img1.pitch*col + row] < 5){
-                    img1.ptr[img1.pitch*col + row] = 100;
+                    img1.ptr[img1.pitch*col + row] = 150;
                 }
             }
         }
