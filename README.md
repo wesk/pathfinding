@@ -1,7 +1,7 @@
 pathfinding
 ===========
 
-A * pathfinding algorithm over 2d binary occupancy grid
+A * pathfinding implementation over 2d binary occupancy grid
 Generalized Voronoi Diagram (GVD) generator.
 
 todo: 
@@ -34,4 +34,4 @@ comment out Pangolin/openGL stuff
 Manually configure grid
 use print or printEverything to get console output.
 
-## Current configuration code within main.cpp should be understandable.
+#wahooo!
